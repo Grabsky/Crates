@@ -1,0 +1,28 @@
+version: 1 # Do not modify this unless you know what you're doing
+
+# Following section(s) supports MiniMessage components and classic color codes (§)
+general:
+  player-not-found: '§6§lS§e§lD§8 » §cNie odnaleziono takiego gracza.'
+  missing-permissions: '§6§lS§e§lD§8 » §cBrak uprawnień.'
+  player-only: '§6§lS§e§lD§8 » §cMożesz to zrobić tylko jako gracz.'
+  reload-success: '§6§lS§e§lD§8 » §7Konfiguracja została pomyślnie przeładowana.'
+  reload-fail: '§6§lS§e§lD§8 » §cWystąpił błąd podczas ładowania konfiguracji.'
+  no-space: '§6§lS§e§lD§8 » §cNie masz wystarczająco miejsca w ekwipunku.'
+
+crates:
+  command-help:
+    - ''
+    - '§e§lCrates§7 v1.0.0dev'
+    - ''
+    - '§8» §e/crates reload§7 - Reloads config and rewards'
+    - '§8» §e/crates getcrate <crate>§7 - Gives you a crate'
+    - '§8» §e/crates give <player> <crate> [<amount>]§7 - Gives crate key'
+    - '§8» §e/crates giveall <crate> [<amount>]§7 - Gives crate key(s) to online'
+    - ''
+  crate-not-found: '§6§lS§e§lD§8 » §7Nie odnaleziono takiej skrzynki.'
+  crate-placed: '§6§lS§e§lD§8 » §7Skrzynka została postawiona.'
+  crate-opened: '§6§lS§e§lD§8 » §7Otworzyłeś skrzynkę {0}§7.'
+  crate-missing-key: '§6§lS§e§lD§8 » §cNie posiadasz klucza do tej skrzynki.'
+  crate-key-received: '§6§lS§e§lD§8 » §7Otrzymałeś klucz do skrzynki {0}§7.'
+  crate-block-received: '§6§lS§e§lD§8 » §7Otrzymałeś skrzynkę {0}§7.'
+  crate-occupied: '§6§lS§e§lD§8 » §cTa skrzynka jest teraz zajęta.'

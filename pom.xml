@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.skydistrict</groupId>
+    <artifactId>Crates</artifactId>
+    <version>1.0.0-release</version>
+    <packaging>jar</packaging>
+
+    <name>Crates</name>
+
+    <properties>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <builds.local>C:/Users/admin/Development/local</builds.local>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <outputFile>../git-builds/${project.artifactId}-${project.version}.jar</outputFile>
+                            <!-- Relocating adventure to prevent weird issues -->
+                            <relocations>
+                                <relocation>
+                                    <pattern>net.kyori.adventure.text.minimessage</pattern>
+                                    <shadedPattern>net.skydistrict.crates.adventure</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <!-- Excluding anything from kyori besides the MiniMessage -->
+                            <filters>
+                                <filter>
+                                    <artifact>net.kyori:*</artifact>
+                                    <excludes>
+                                        <exclude>/**</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <include>net/kyori/adventure/text/minimessage/**</include>
+                                    </includes>
+                                </filter>
+                            </filters>
+                            <!-- Excluding junk left by MiniMessage -->
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.jetbrains:*</exclude>
+                                    <exclude>org.intellij.lang:*</exclude>
+                                    <exclude>org.checkerframework:*</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <repositories>
+        <!-- PaperMC -->
+        <repository>
+            <id>papermc-repo</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
+        <!-- MiniMessage -->
+        <repository>
+            <id>sonatype-oss-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+        <!-- Mojang AuthLib -->
+        <repository>
+            <id>mojang-repo</id>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- PaperMC -->
+        <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- MiniMessage -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>4.1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Indigo -->
+        <dependency>
+            <groupId>me.grabsky</groupId>
+            <artifactId>Indigo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${builds.local}/Indigo.jar</systemPath>
+        </dependency>
+        <!-- Local server jar for NMS -->
+        <dependency>
+            <groupId>net.minecraft</groupId>
+            <artifactId>server</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${builds.local}/patched_1.16.5.jar</systemPath>
+        </dependency>
+    </dependencies>
+</project>

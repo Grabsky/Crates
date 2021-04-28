@@ -1,0 +1,148 @@
+package net.skydistrict.crates.listeners;
+
+import net.minecraft.server.v1_16_R3.BlockPosition;
+import net.minecraft.server.v1_16_R3.TileEntityChest;
+import net.skydistrict.crates.Crates;
+import net.skydistrict.crates.configuration.Config;
+import net.skydistrict.crates.configuration.Lang;
+import net.skydistrict.crates.crates.Crate;
+import net.skydistrict.crates.crates.CrateManager;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.block.Chest;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Vector;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+public class CrateListener implements Listener {
+    private final Crates instance;
+    private final CrateManager manager;
+    private final Map<Location, Boolean> crates;
+    private final Set<Item> displayItems;
+
+    public CrateListener(Crates instance) {
+        this.instance = instance;
+        this.manager = instance.getCratesManager();
+        this.crates = new HashMap<>();
+        this.displayItems = new HashSet<>();
+    }
+
+    @EventHandler
+    public void onCrateOpen(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getClickedBlock().getType() != Material.CHEST) return;
+        final Chest chest = (Chest) event.getClickedBlock().getState();
+        if (chest.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
+            event.setCancelled(true);
+            final Player player = event.getPlayer();
+            if (event.getItem() != null) {
+                final ItemStack item = event.getItem();
+                final ItemMeta meta = item.getItemMeta();
+                if (meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
+                    final String id = chest.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
+                    if (meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING).equals(id)) {
+                        if (player.getInventory().firstEmpty() != -1) {
+                            final Crate crate = manager.getCrate(id);
+                            if (crate != null) {
+                                final Location location = chest.getLocation();
+                                if (!crates.containsKey(location) || !crates.get(location)) {
+                                    crates.put(location, true);
+                                    // Removing 1 key from player's inventory
+                                    final ItemStack itemToRemove = item.clone();
+                                    itemToRemove.setAmount(1);
+                                    player.getInventory().removeItem(itemToRemove);
+                                    // Drawing a reward and adding it to player's inventory
+                                    final ItemStack reward = crate.getRandomReward().getItem();
+                                    player.getInventory().addItem(reward);
+                                    Lang.send(player, Lang.CRATE_OPENED, crate.getName());
+                                    this.openAnimation(chest, location, reward);
+                                    return;
+                                }
+                                player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
+                                Lang.send(player, Lang.CRATE_OCCUPIED);
+                                return;
+                            }
+                            player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
+                            Lang.send(player, Lang.CRATE_NOT_FOUND);
+                            return;
+                        }
+                        player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
+                        Lang.send(player, Lang.NO_SPACE);
+                        return;
+                    }
+                }
+            }
+            player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
+            Lang.send(player, Lang.CRATE_MISSING_KEY);
+        }
+    }
+
+    @EventHandler
+    public static void onCratePlace(BlockPlaceEvent event) {
+        if (event.isCancelled()) return;
+        if (event.getItemInHand().getType() != Material.CHEST) return;
+        final ItemMeta meta = event.getItemInHand().getItemMeta();
+        if (meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
+            final String id = meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
+            if (id != null) {
+                final Chest chest = (Chest) event.getBlockPlaced().getState();
+                chest.getPersistentDataContainer().set(Crates.CRATE_ID, PersistentDataType.STRING, id);
+                chest.update();
+                Lang.send(event.getPlayer(), Lang.CRATE_PLACED);
+            }
+        }
+    }
+
+    private void openAnimation(Chest chest, Location location, ItemStack item) {
+        // A bunch of variables I can't really get rid of
+        final org.bukkit.World world = location.getWorld();
+        final Location displayLocation = chest.getLocation().clone().add(0.5, 1, 0.5);
+        final net.minecraft.server.v1_16_R3.World nmsWorld = ((CraftWorld) chest.getWorld()).getHandle();
+        final BlockPosition position = new BlockPosition(location.getX(), location.getY(), location.getZ());
+        final TileEntityChest tileChest = (TileEntityChest) nmsWorld.getTileEntity(position);
+        // Opening the chest
+        nmsWorld.playBlockAction(position, tileChest.getBlock().getBlock(), 1, 1);
+        // Spawning a reward item
+        final Item displayItem = chest.getWorld().dropItem(displayLocation, item);
+        displayItem.setPickupDelay(Integer.MAX_VALUE);
+        displayItem.setVelocity(new Vector(0, -0.5, 0));
+        // Adding item to a list (so we can remove it on plugin disable)
+        displayItems.add(displayItem);
+        // Playing sound and displaying particles
+        world.playSound(location, Config.OPEN_SOUND_TYPE, Config.OPEN_SOUND_VOLUME, Config.OPEN_SOUND_PITCH);
+        world.spawnParticle(Config.PARTICLES_TYPE, displayLocation, Config.PARTICLES_AMOUNT, Config.PARTICLES_OFFSET_X, Config.PARTICLES_OFFSET_Y, Config.PARTICLES_OFFSET_Z, Config.PARTICLES_SPEED);
+        // Closing chest and removing item after X ticks (80 by default)
+        Bukkit.getScheduler().runTaskLater(instance, () -> {
+            nmsWorld.playBlockAction(position, tileChest.getBlock().getBlock(), 1, 0);
+            // Removing display item from list and then from the world
+            displayItems.remove(displayItem);
+            displayItem.remove();
+            // Spawning particle
+            world.spawnParticle(Particle.ITEM_CRACK, displayLocation, 5, 0.15, 0.15, 0.15, 0.01, item);
+            // Making crate available again
+            crates.put(location, false);
+        }, Config.OPEN_TIME);
+    }
+
+    public void removeDisplayItem() {
+        for (Item item : displayItems) {
+            item.remove();
+        }
+    }
+}

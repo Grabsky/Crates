@@ -1,0 +1,11 @@
+name: Crates
+version: ${project.version}
+main: net.skydistrict.crates.Crates
+api-version: 1.16
+authors: [Grabsky]
+depends: [Indigo]
+commands:
+  crates:
+    aliases: ['crate', 'skrzynki']
+    permission: 'skydistrict.crates'
+    permission-message: '§6§lS§e§lD§8 » §cBrak uprawnień.'

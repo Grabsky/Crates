@@ -1,0 +1,25 @@
+version: 1 # Do not modify this unless you know what you're doing
+
+settings:
+  # How much time crate would be open for. In ticks. (Default: 80 = 4 seconds)
+  open-time: 80
+
+  # Sound played after opening a crate
+  open-sound:
+    type: 'ENTITY_ITEM_PICKUP'
+    volume: 1
+    pitch: 1
+
+  missing-key-sound:
+    type: 'BLOCK_ANVIL_PLACE'
+    volume: 1
+    pitch: 1
+
+  # Particles displayed after opening a crate
+  particles:
+    type: 'CLOUD'
+    amount: 3
+    speed: 0.01
+    offset-x: 0.15
+    offset-y: 0.15
+    offset-z: 0.15

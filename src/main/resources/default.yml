@@ -1,0 +1,33 @@
+name: '§eDefault'
+crate-key:
+  material: 'TRIPWIRE_HOOK'
+  meta:
+    name: '§eDefault Key'
+    lore:
+      - '§7Use this key to open §eDefault Crate'
+    enchantments:
+      infinity: 1
+    itemflags:
+      - 'HIDE_ENCHANTS'
+rewards:
+  '0':
+    material: 'STONE_SHOVEL'
+    amount: 1
+    meta:
+      name: ''
+      lore:
+        - '§7Wait! You can hide enchants?'
+      enchantments:
+        efficiency: 1
+      itemflags:
+        - 'HIDE_ENCHANTS'
+    weight: 5
+  '1':
+    material: 'PLAYER_HEAD'
+    amount: 1
+    meta:
+      name: '§bWha... a beacon?!?'
+      lore:
+        - '§7Apparently not, but still looks cool :)'
+      skull-value: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmZhZjAyNGVhZWIxOWYxOTYzMjdhYjc3Y2Y4MTcxZTA2MzlkOTM5ODMwM2ZkOTQ4MmIzMDNkOWQwMjU0MWU1YyJ9fX0='
+    weight: 5
