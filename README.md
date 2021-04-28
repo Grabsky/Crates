@@ -12,5 +12,5 @@ Permission | Description
 `skydistrict.crates` | Using `/crates` command.
 `skydistrict.crates.getcrate` | Using `/crates getcrate` command.
 `skydistrict.crates.give` | Using `/crates give` command.
-`skydistrict.crates.giveall` | Using `/crates give.all` command.
+`skydistrict.crates.give.all` | Using `/crates giveall` command.
 `skydistrict.crates.reload` | Using `/crates reload` command.
