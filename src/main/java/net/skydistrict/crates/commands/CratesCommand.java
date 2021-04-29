@@ -133,8 +133,8 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        ArrayList<String> tabCompletions = new ArrayList<>();
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        final ArrayList<String> tabCompletions = new ArrayList<>();
         if (args.length == 1) {
             this.addMatches(args[args.length - 1], BASE, tabCompletions);
         } else if (args[0].equalsIgnoreCase("getcrate")) {

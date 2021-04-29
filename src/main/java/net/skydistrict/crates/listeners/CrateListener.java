@@ -7,6 +7,7 @@ import net.skydistrict.crates.configuration.Config;
 import net.skydistrict.crates.configuration.Lang;
 import net.skydistrict.crates.crates.Crate;
 import net.skydistrict.crates.crates.CrateManager;
+import net.skydistrict.crates.crates.Reward;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -48,30 +49,46 @@ public class CrateListener implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getClickedBlock().getType() != Material.CHEST) return;
         final Chest chest = (Chest) event.getClickedBlock().getState();
+        // If clicked chest has PersistentData of 'crateId'
         if (chest.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
             event.setCancelled(true);
             final Player player = event.getPlayer();
+            // If player is holding an item
             if (event.getItem() != null) {
                 final ItemStack item = event.getItem();
                 final ItemMeta meta = item.getItemMeta();
+                // If player's held item has PersistentData of 'crateId'
                 if (meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
                     final String id = chest.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
+                    // If player's held item PersistentData of 'crateId' matches the crate one
                     if (meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING).equals(id)) {
+                        // If player has 1 empty slot in his inventory
                         if (player.getInventory().firstEmpty() != -1) {
                             final Crate crate = manager.getCrate(id);
+                            // If crate is not null (to prevent errors when trying to open old, non-existent anymore crates)
                             if (crate != null) {
                                 final Location location = chest.getLocation();
+                                // If crate is not occupied
                                 if (!crates.containsKey(location) || !crates.get(location)) {
+                                    // Mark crate as currently occupied
                                     crates.put(location, true);
-                                    // Removing 1 key from player's inventory
-                                    final ItemStack itemToRemove = item.clone();
-                                    itemToRemove.setAmount(1);
-                                    player.getInventory().removeItem(itemToRemove);
-                                    // Drawing a reward and adding it to player's inventory
-                                    final ItemStack reward = crate.getRandomReward().getItem();
-                                    player.getInventory().addItem(reward);
+                                    // Sending a message
                                     Lang.send(player, Lang.CRATE_OPENED, crate.getName());
-                                    this.openAnimation(chest, location, reward);
+                                    // Removing 1 key from player's inventory
+                                    player.getInventory().removeItem(crate.getCrateKey());
+                                    // Drawing a reward
+                                    final Reward reward = crate.getRandomReward();
+                                    // Giving player an ItemStack reward
+                                    if (reward.hasItem()) {
+                                        player.getInventory().addItem(reward.getItem());
+                                    }
+                                    // Executing commands
+                                    if (reward.hasConsoleCommands()) {
+                                        for (String c : reward.getConsoleCommands()) {
+                                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c.replaceAll("%player%", player.getName()));
+                                        }
+                                    }
+                                    this.openAnimation(chest, location, reward.getItem());
                                     return;
                                 }
                                 player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
