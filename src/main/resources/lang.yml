@@ -19,7 +19,7 @@ crates:
     - '§8» §e/crates give <player> <crate> [<amount>]§7 - Gives crate key'
     - '§8» §e/crates giveall <crate> [<amount>]§7 - Gives crate key(s) to online'
     - ''
-  crate-not-found: '§6§lS§e§lD§8 » §7Nie odnaleziono takiej skrzynki.'
+  crate-not-found: '§6§lS§e§lD§8 » §cNie odnaleziono takiej skrzynki.'
   crate-placed: '§6§lS§e§lD§8 » §7Skrzynka została postawiona.'
   crate-opened: '§6§lS§e§lD§8 » §7Otworzyłeś skrzynkę {0}§7.'
   crate-missing-key: '§6§lS§e§lD§8 » §cNie posiadasz klucza do tej skrzynki.'

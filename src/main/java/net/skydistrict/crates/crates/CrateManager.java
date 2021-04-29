@@ -26,7 +26,7 @@ public class CrateManager {
         this.instance = instance;
         this.crates = new HashMap<>();
         this.cratesDirectory = new File(instance.getDataFolder() + File.separator + "crates");
-        this.defaultCrateFile = new File(cratesDirectory + File.separator + "default.yml");
+        this.defaultCrateFile = new File(cratesDirectory + File.separator + "example.yml");
     }
 
     public Crate getCrate(String id) {
@@ -45,16 +45,17 @@ public class CrateManager {
         // Saving default file
         if (!defaultCrateFile.exists()) {
             try {
-                FileUtils.copyToFile(instance.getResource("default.yml"), defaultCrateFile);
+                FileUtils.copyToFile(instance.getResource("example.yml"), defaultCrateFile);
             } catch (IOException e) {
                 instance.getLogger().warning("An error occurred while trying to save a default file.");
                 e.printStackTrace();
                 return;
             }
         }
+        int loaded = 0;
         for (File file : cratesDirectory.listFiles()) {
             final YamlConfiguration fc = YamlConfiguration.loadConfiguration(file);
-            if (file.getName().endsWith(".yml")) {
+            if (file.getName().endsWith(".yml") && !file.getName().equals("example.yml")) {
                 final String crateId = file.getName().replace(".yml", "");
                 final String crateName = fc.getString("name");
                 final ItemStack crateKey = ItemUtils.parseKeyCrate(fc, "crate-key", crateId);
@@ -72,6 +73,8 @@ public class CrateManager {
                 // Generating rewards pool
                 crates.get(crateId).generateRewardsPool();
             }
+            loaded++;
         }
+        instance.getLogger().info("Loaded " + loaded + " crates.");
     }
 }

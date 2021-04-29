@@ -1,15 +1,15 @@
-name: '§eGolden Crate'
+name: '§eDefault Crate'
 crate-key:
   material: 'TRIPWIRE_HOOK'
   meta:
-    name: '§eGolden Crate Key'
+    name: '§eDefault Crate Key'
     lore:
-      - '§7Use this key to open §eGolden Crate'
+      - '§7Use this key to open §eDefault Crate'
     enchantments:
       infinity: 1
     itemflags:
       - 'HIDE_ENCHANTS'
-    custom-model-data: 2
+    custom-model-data: 1
 rewards:
   '0':
     weight: 5
@@ -17,7 +17,6 @@ rewards:
       material: 'STONE_SHOVEL'
       amount: 1
       meta:
-        name: ''
         lore:
           - '§7Wait! You can hide enchants?'
         enchantments:

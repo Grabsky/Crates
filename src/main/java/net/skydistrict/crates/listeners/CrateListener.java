@@ -17,9 +17,11 @@ import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,88 +44,6 @@ public class CrateListener implements Listener {
         this.manager = instance.getCratesManager();
         this.crates = new HashMap<>();
         this.displayItems = new HashSet<>();
-    }
-
-    @EventHandler
-    public void onCrateOpen(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        if (event.getClickedBlock().getType() != Material.CHEST) return;
-        final Chest chest = (Chest) event.getClickedBlock().getState();
-        // If clicked chest has PersistentData of 'crateId'
-        if (chest.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
-            event.setCancelled(true);
-            final Player player = event.getPlayer();
-            // If player is holding an item
-            if (event.getItem() != null) {
-                final ItemStack item = event.getItem();
-                final ItemMeta meta = item.getItemMeta();
-                // If player's held item has PersistentData of 'crateId'
-                if (meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
-                    final String id = chest.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
-                    // If player's held item PersistentData of 'crateId' matches the crate one
-                    if (meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING).equals(id)) {
-                        // If player has 1 empty slot in his inventory
-                        if (player.getInventory().firstEmpty() != -1) {
-                            final Crate crate = manager.getCrate(id);
-                            // If crate is not null (to prevent errors when trying to open old, non-existent anymore crates)
-                            if (crate != null) {
-                                final Location location = chest.getLocation();
-                                // If crate is not occupied
-                                if (!crates.containsKey(location) || !crates.get(location)) {
-                                    // Mark crate as currently occupied
-                                    crates.put(location, true);
-                                    // Sending a message
-                                    Lang.send(player, Lang.CRATE_OPENED, crate.getName());
-                                    // Removing 1 key from player's inventory
-                                    player.getInventory().removeItem(crate.getCrateKey());
-                                    // Drawing a reward
-                                    final Reward reward = crate.getRandomReward();
-                                    // Giving player an ItemStack reward
-                                    if (reward.hasItem()) {
-                                        player.getInventory().addItem(reward.getItem());
-                                    }
-                                    // Executing commands
-                                    if (reward.hasConsoleCommands()) {
-                                        for (String c : reward.getConsoleCommands()) {
-                                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c.replaceAll("%player%", player.getName()));
-                                        }
-                                    }
-                                    this.openAnimation(chest, location, reward.getItem());
-                                    return;
-                                }
-                                player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-                                Lang.send(player, Lang.CRATE_OCCUPIED);
-                                return;
-                            }
-                            player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-                            Lang.send(player, Lang.CRATE_NOT_FOUND);
-                            return;
-                        }
-                        player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-                        Lang.send(player, Lang.NO_SPACE);
-                        return;
-                    }
-                }
-            }
-            player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-            Lang.send(player, Lang.CRATE_MISSING_KEY);
-        }
-    }
-
-    @EventHandler
-    public static void onCratePlace(BlockPlaceEvent event) {
-        if (event.isCancelled()) return;
-        if (event.getItemInHand().getType() != Material.CHEST) return;
-        final ItemMeta meta = event.getItemInHand().getItemMeta();
-        if (meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
-            final String id = meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
-            if (id != null) {
-                final Chest chest = (Chest) event.getBlockPlaced().getState();
-                chest.getPersistentDataContainer().set(Crates.CRATE_ID, PersistentDataType.STRING, id);
-                chest.update();
-                Lang.send(event.getPlayer(), Lang.CRATE_PLACED);
-            }
-        }
     }
 
     private void openAnimation(Chest chest, Location location, ItemStack item) {
@@ -158,8 +78,106 @@ public class CrateListener implements Listener {
     }
 
     public void removeDisplayItem() {
-        for (Item item : displayItems) {
-            item.remove();
+        if (displayItems != null && !displayItems.isEmpty()) {
+            for (Item item : displayItems) {
+                item.remove();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onCrateOpen(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getClickedBlock().getType() != Material.CHEST) return;
+        final Chest chest = (Chest) event.getClickedBlock().getState();
+        // Returning if clicked chest doesn't have PersistentData of 'crateId'
+        if (!chest.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) return;
+        // Cancelling the event as player clicked on a crate
+        event.setCancelled(true);
+        final Player player = event.getPlayer();
+        // If player is holding an item
+        if (event.getItem() != null) {
+            final ItemStack item = event.getItem();
+            final ItemMeta meta = item.getItemMeta();
+            // If player's held item has PersistentData of 'crateId'
+            if (meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
+                final String id = chest.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
+                // If player's held item PersistentData of 'crateId' matches the crate one
+                if (meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING).equals(id)) {
+                    // If player has 1 empty slot in his inventory
+                    if (player.getInventory().firstEmpty() != -1) {
+                        final Crate crate = manager.getCrate(id);
+                        // If crate is not null (to prevent errors when trying to open old, non-existent anymore crates)
+                        if (crate != null) {
+                            final Location location = chest.getLocation();
+                            // If crate is not occupied
+                            if (!crates.containsKey(location) || !crates.get(location)) {
+                                // Mark crate as currently occupied
+                                crates.put(location, true);
+                                // Sending a message
+                                Lang.send(player, Lang.CRATE_OPENED, crate.getName());
+                                // Removing 1 key from player's inventory
+                                item.setAmount(item.getAmount() - 1);
+                                // Drawing a reward
+                                final Reward reward = crate.getRandomReward();
+                                // Giving player an ItemStack reward
+                                if (reward.hasItem()) {
+                                    player.getInventory().addItem(reward.getItem());
+                                }
+                                // Executing commands
+                                if (reward.hasConsoleCommands()) {
+                                    for (String c : reward.getConsoleCommands()) {
+                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c.replaceAll("%player%", player.getName()));
+                                    }
+                                }
+                                this.openAnimation(chest, location, reward.getItem());
+                                return;
+                            }
+                            player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
+                            Lang.send(player, Lang.CRATE_OCCUPIED);
+                            return;
+                        }
+                        player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
+                        Lang.send(player, Lang.CRATE_NOT_FOUND);
+                        return;
+                    }
+                    player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
+                    Lang.send(player, Lang.NO_SPACE);
+                    return;
+                }
+            }
+        }
+        player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
+        Lang.send(player, Lang.CRATE_MISSING_KEY);
+    }
+
+    @EventHandler
+    public static void onCratePlace(BlockPlaceEvent event) {
+        if (event.isCancelled()) return;
+        if (event.getItemInHand().getType() != Material.CHEST) return;
+        final ItemMeta meta = event.getItemInHand().getItemMeta();
+        // Returning if clicked chest doesn't have PersistentData of 'crateId'
+        if (!meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) return;
+        // Getting crate from PersistentData of 'crateId' of player's held item
+        final String crateId = meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
+        if (crateId != null) {
+            // Applying PersistentData to newly placed chest
+            final Chest chest = (Chest) event.getBlockPlaced().getState();
+            chest.getPersistentDataContainer().set(Crates.CRATE_ID, PersistentDataType.STRING, crateId);
+            chest.update();
+            Lang.send(event.getPlayer(), Lang.CRATE_PLACED);
+        }
+    }
+
+    // Prevents crate key from being a crafting ingredient
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onCraftPrepare(PrepareItemCraftEvent event) {
+        if (event.getRecipe() == null) return;
+        for (ItemStack item : event.getInventory().getMatrix()) {
+            // Yes Bukkit, apparently it can be null...
+            if (item != null && item.getItemMeta().getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
+                event.getInventory().setResult(new ItemStack(Material.AIR));
+            }
         }
     }
 }
