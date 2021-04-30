@@ -1,6 +1,5 @@
 package net.skydistrict.crates.crates;
 
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

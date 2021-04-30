@@ -1,7 +1,7 @@
 # Crates
 Simple and efficient crates plugin.
 
-*Even though example.yml file is generated, it's not loaded as an actual crate. Plugin comes with no crates and you have to add them by yourself.*
+*Even though example.yml file is generated, it's not loaded as an actual crate. Plugin comes with no crates by default and you have to add them by yourself.*
 
 ## Building
 To build, run `mvn install` or `mvn clean install`.  

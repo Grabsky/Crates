@@ -10,7 +10,7 @@ public class Crate {
     private final ItemStack crateKey;
     private final ItemStack crateItem;
     private final ArrayList<Reward> rewards;
-    private char[] rewardsPool;
+    private char[] rewardPool;
 
     public Crate(String name, ItemStack crateKey, ItemStack crateItem) {
         this.name = name;
@@ -44,11 +44,11 @@ public class Crate {
         for (int i = 0; i < rewards.size(); i++) {
             for (int z = 0; z < rewards.get(i).getWeight(); z++) builder.append(i);
         }
-        this.rewardsPool = builder.toString().toCharArray();
+        this.rewardPool = builder.toString().toCharArray();
     }
 
     /** Returns random Reward drawn from rewards path */
     public Reward getRandomReward() {
-        return rewards.get(Character.getNumericValue(rewardsPool[new Random().nextInt(rewardsPool.length)]));
+        return rewards.get(Character.getNumericValue(rewardPool[new Random().nextInt(rewardPool.length)]));
     }
 }

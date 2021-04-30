@@ -12,10 +12,10 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
-public class ItemUtils {
+public class Parser {
 
     /** Parses ItemStack from given path */
-    public static ItemStack parseRewardItem(FileConfiguration fc, String path) {
+    public static ItemStack rewardItem(FileConfiguration fc, String path) {
         final Material material = Material.getMaterial(fc.getString(path + ".material"));
         final ItemBuilder builder = new ItemBuilder(material, fc.getInt(path + ".amount", 1));
         // Applying ItemMeta if set
@@ -56,7 +56,7 @@ public class ItemUtils {
     }
 
     /** Parses Crate Key from given path */
-    public static ItemStack parseKeyCrate(FileConfiguration fc, String path, String crateId) {
+    public static ItemStack keyItem(FileConfiguration fc, String path, String crateId) {
         final Material material = Material.getMaterial(fc.getString(path + ".material"));
         final ItemBuilder builder = new ItemBuilder(material, fc.getInt(path + ".amount", 1));
         // Applying name

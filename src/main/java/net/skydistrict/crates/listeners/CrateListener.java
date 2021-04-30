@@ -114,7 +114,7 @@ public class CrateListener implements Listener {
                             if (!crates.containsKey(location) || !crates.get(location)) {
                                 // Mark crate as currently occupied
                                 crates.put(location, true);
-                                // Sending a message
+                                // Sending player a message
                                 Lang.send(player, Lang.CRATE_OPENED, crate.getName());
                                 // Removing 1 key from player's inventory
                                 item.setAmount(item.getAmount() - 1);
