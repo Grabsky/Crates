@@ -1,16 +1,17 @@
 package net.skydistrict.crates.crates;
 
+import me.grabsky.indigo.builders.ItemBuilder;
 import net.skydistrict.crates.Crates;
-import net.skydistrict.crates.builders.ItemBuilder;
 import net.skydistrict.crates.utils.Parser;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,8 @@ public class CrateManager {
         cratesDirectory.mkdirs();
         // Saving default file
         try {
-            FileUtils.copyToFile(instance.getResource("example.yml"), defaultCrateFile);
+            // Saving default file (replacing if exists)
+            Files.copy(instance.getResource("example.yml"), defaultCrateFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             instance.getLogger().warning("An error occurred while trying to save a default file.");
             e.printStackTrace();

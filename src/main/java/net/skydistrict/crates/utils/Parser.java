@@ -1,7 +1,7 @@
 package net.skydistrict.crates.utils;
 
+import me.grabsky.indigo.builders.ItemBuilder;
 import net.skydistrict.crates.Crates;
-import net.skydistrict.crates.builders.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;

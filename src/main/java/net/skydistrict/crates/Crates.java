@@ -42,7 +42,6 @@ public class Crates extends JavaPlugin {
         CratesCommand cratesCommand = new CratesCommand(this);
         this.getCommand("crates").setExecutor(cratesCommand);
         this.getCommand("crates").setTabCompleter(cratesCommand);
-
     }
 
     @Override
