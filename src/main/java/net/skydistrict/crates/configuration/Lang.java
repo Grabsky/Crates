@@ -1,7 +1,7 @@
 package net.skydistrict.crates.configuration;
 
+import me.grabsky.indigo.adventure.MiniMessage;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skydistrict.crates.Crates;
 import net.skydistrict.crates.configuration.components.Message;
 import org.bukkit.command.CommandSender;

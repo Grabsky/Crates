@@ -41,33 +41,6 @@
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <outputFile>../git-builds/${project.artifactId}-${project.version}.jar</outputFile>
-                            <!-- Relocating adventure to prevent weird issues -->
-                            <relocations>
-                                <relocation>
-                                    <pattern>net.kyori.adventure.text.minimessage</pattern>
-                                    <shadedPattern>net.skydistrict.crates.adventure</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <!-- Excluding anything from kyori besides the MiniMessage -->
-                            <filters>
-                                <filter>
-                                    <artifact>net.kyori:*</artifact>
-                                    <excludes>
-                                        <exclude>/**</exclude>
-                                    </excludes>
-                                    <includes>
-                                        <include>net/kyori/adventure/text/minimessage/**</include>
-                                    </includes>
-                                </filter>
-                            </filters>
-                            <!-- Excluding junk left by MiniMessage -->
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.jetbrains:*</exclude>
-                                    <exclude>org.intellij.lang:*</exclude>
-                                    <exclude>org.checkerframework:*</exclude>
-                                </excludes>
-                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
@@ -87,11 +60,6 @@
             <id>papermc-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
-        <!-- MiniMessage -->
-        <repository>
-            <id>sonatype-oss-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </repository>
         <!-- Mojang AuthLib -->
         <repository>
             <id>mojang-repo</id>
@@ -106,13 +74,6 @@
             <artifactId>paper-api</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <!-- MiniMessage -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <!-- Mojang AuthLib -->
         <dependency>

@@ -1,7 +1,7 @@
 package net.skydistrict.crates.commands;
 
+import me.grabsky.indigo.adventure.MiniMessage;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skydistrict.crates.Crates;
 import net.skydistrict.crates.configuration.Lang;
 import net.skydistrict.crates.crates.Crate;
