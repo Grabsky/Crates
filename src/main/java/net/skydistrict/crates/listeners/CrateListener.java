@@ -8,10 +8,7 @@ import net.skydistrict.crates.configuration.Lang;
 import net.skydistrict.crates.crates.Crate;
 import net.skydistrict.crates.crates.CrateManager;
 import net.skydistrict.crates.crates.Reward;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.Item;
@@ -89,6 +86,7 @@ public class CrateListener implements Listener {
     public void onCrateOpen(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getClickedBlock().getType() != Material.CHEST) return;
+        if (event.getPlayer().getGameMode() == GameMode.SPECTATOR) return;
         final Chest chest = (Chest) event.getClickedBlock().getState();
         // Returning if clicked chest doesn't have PersistentData of 'crateId'
         if (!chest.getPersistentDataContainer().has(CrateManager.CRATE_ID, PersistentDataType.STRING)) return;
