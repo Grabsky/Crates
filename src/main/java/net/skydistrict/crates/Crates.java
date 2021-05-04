@@ -6,7 +6,6 @@ import net.skydistrict.crates.configuration.Config;
 import net.skydistrict.crates.configuration.Lang;
 import net.skydistrict.crates.crates.CrateManager;
 import net.skydistrict.crates.listeners.CrateListener;
-import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Crates extends JavaPlugin {
