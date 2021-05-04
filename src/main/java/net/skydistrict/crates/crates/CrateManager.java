@@ -1,9 +1,11 @@
 package net.skydistrict.crates.crates;
 
 import me.grabsky.indigo.builders.ItemBuilder;
+import me.grabsky.indigo.logger.ConsoleLogger;
 import net.skydistrict.crates.Crates;
 import net.skydistrict.crates.utils.Parser;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -19,15 +21,20 @@ import java.util.Set;
 
 public class CrateManager {
     private final Crates instance;
+    private final ConsoleLogger consoleLogger;
     private final Map<String, Crate> crates;
     private final File cratesDirectory;
     private final File defaultCrateFile;
 
+    public static NamespacedKey CRATE_ID;
+
     public CrateManager(Crates instance) {
         this.instance = instance;
+        this.consoleLogger = instance.getConsoleLogger();
         this.crates = new HashMap<>();
         this.cratesDirectory = new File(instance.getDataFolder() + File.separator + "crates");
         this.defaultCrateFile = new File(cratesDirectory + File.separator + "example.yml");
+        CRATE_ID = new NamespacedKey(instance, "crateId");
     }
 
     public Crate getCrate(String id) {
@@ -48,7 +55,7 @@ public class CrateManager {
             // Saving default file (replacing if exists)
             Files.copy(instance.getResource("example.yml"), defaultCrateFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            instance.getLogger().warning("An error occurred while trying to save a default file.");
+            consoleLogger.error("An error occurred while trying to save a default file.");
             e.printStackTrace();
             return;
         }
@@ -61,7 +68,7 @@ public class CrateManager {
                 final String crateName = fc.getString("name");
                 final ItemStack crateKey = Parser.keyItem(fc, "crate-key", crateId);
                 final ItemBuilder crateItem = new ItemBuilder(Material.CHEST).setName(crateName);
-                crateItem.getPersistentDataContainer().set(Crates.CRATE_ID, PersistentDataType.STRING, crateId);
+                crateItem.getPersistentDataContainer().set(CRATE_ID, PersistentDataType.STRING, crateId);
                 crates.put(crateId, new Crate(crateName, crateKey, crateItem.build()));
                 // Getting values
                 for (String key : fc.getConfigurationSection("rewards").getKeys(false)) {
@@ -76,6 +83,6 @@ public class CrateManager {
             }
             loaded++;
         }
-        instance.getLogger().info("Loaded " + loaded + " crates.");
+        consoleLogger.success("Loaded " + loaded + " crates.");
     }
 }

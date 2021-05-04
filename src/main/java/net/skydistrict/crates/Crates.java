@@ -1,5 +1,6 @@
 package net.skydistrict.crates;
 
+import me.grabsky.indigo.logger.ConsoleLogger;
 import net.skydistrict.crates.commands.CratesCommand;
 import net.skydistrict.crates.configuration.Config;
 import net.skydistrict.crates.configuration.Lang;
@@ -11,24 +12,25 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Crates extends JavaPlugin {
     // Instances
     private static Crates instance;
+    private ConsoleLogger consoleLogger;
     private Config config;
     private Lang lang;
     private CrateListener crateListener;
     private CrateManager crateManager;
-
     // Getters
     public static Crates getInstance() {
         return instance;
     }
+    public ConsoleLogger getConsoleLogger() { return consoleLogger; }
     public CrateManager getCratesManager() {
         return crateManager;
     }
-    public static NamespacedKey CRATE_ID;
+
 
     @Override
     public void onEnable() {
         instance = this;
-        CRATE_ID = new NamespacedKey(this, "crateId");
+        this.consoleLogger = new ConsoleLogger(this);
         // Creating instances
         this.config = new Config(this);
         this.lang = new Lang(this);

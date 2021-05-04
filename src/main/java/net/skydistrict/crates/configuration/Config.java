@@ -1,5 +1,6 @@
 package net.skydistrict.crates.configuration;
 
+import me.grabsky.indigo.logger.ConsoleLogger;
 import net.skydistrict.crates.Crates;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -10,6 +11,7 @@ import java.io.File;
 
 public class Config {
     private final Crates instance;
+    private final ConsoleLogger consoleLogger;
     private final File file;
     private static final int CONFIG_VERSION = 1;
 
@@ -32,6 +34,7 @@ public class Config {
 
     public Config(Crates instance) {
         this.instance = instance;
+        this.consoleLogger = instance.getConsoleLogger();
         this.file = new File(instance.getDataFolder() + File.separator + "config.yml");
     }
 
@@ -43,7 +46,7 @@ public class Config {
         // Overriding...
         final FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
         if (fc.getInt("version") != CONFIG_VERSION) {
-            instance.getLogger().warning("Your config.yml file is outdated. Plugin may not work properly.");
+            consoleLogger.error("Your config.yml file is outdated. Plugin may not work properly.");
         }
         // General
         OPEN_TIME = fc.getLong("settings.open-time");

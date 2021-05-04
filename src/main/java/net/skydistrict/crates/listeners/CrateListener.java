@@ -91,7 +91,7 @@ public class CrateListener implements Listener {
         if (event.getClickedBlock().getType() != Material.CHEST) return;
         final Chest chest = (Chest) event.getClickedBlock().getState();
         // Returning if clicked chest doesn't have PersistentData of 'crateId'
-        if (!chest.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) return;
+        if (!chest.getPersistentDataContainer().has(CrateManager.CRATE_ID, PersistentDataType.STRING)) return;
         // Cancelling the event as player clicked on a crate
         event.setCancelled(true);
         final Player player = event.getPlayer();
@@ -100,10 +100,10 @@ public class CrateListener implements Listener {
             final ItemStack item = event.getItem();
             final ItemMeta meta = item.getItemMeta();
             // If player's held item has PersistentData of 'crateId'
-            if (meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
-                final String id = chest.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
+            if (meta.getPersistentDataContainer().has(CrateManager.CRATE_ID, PersistentDataType.STRING)) {
+                final String id = chest.getPersistentDataContainer().get(CrateManager.CRATE_ID, PersistentDataType.STRING);
                 // If player's held item PersistentData of 'crateId' matches the crate one
-                if (meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING).equals(id)) {
+                if (meta.getPersistentDataContainer().get(CrateManager.CRATE_ID, PersistentDataType.STRING).equals(id)) {
                     // If player has 1 empty slot in his inventory
                     if (player.getInventory().firstEmpty() != -1) {
                         final Crate crate = manager.getCrate(id);
@@ -157,13 +157,13 @@ public class CrateListener implements Listener {
         if (event.getItemInHand().getType() != Material.CHEST) return;
         final ItemMeta meta = event.getItemInHand().getItemMeta();
         // Returning if clicked chest doesn't have PersistentData of 'crateId'
-        if (!meta.getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) return;
+        if (!meta.getPersistentDataContainer().has(CrateManager.CRATE_ID, PersistentDataType.STRING)) return;
         // Getting crate from PersistentData of 'crateId' of player's held item
-        final String crateId = meta.getPersistentDataContainer().get(Crates.CRATE_ID, PersistentDataType.STRING);
+        final String crateId = meta.getPersistentDataContainer().get(CrateManager.CRATE_ID, PersistentDataType.STRING);
         if (crateId != null) {
             // Applying PersistentData to newly placed chest
             final Chest chest = (Chest) event.getBlockPlaced().getState();
-            chest.getPersistentDataContainer().set(Crates.CRATE_ID, PersistentDataType.STRING, crateId);
+            chest.getPersistentDataContainer().set(CrateManager.CRATE_ID, PersistentDataType.STRING, crateId);
             chest.update();
             Lang.send(event.getPlayer(), Lang.CRATE_PLACED);
         }
@@ -175,7 +175,7 @@ public class CrateListener implements Listener {
         if (event.getRecipe() == null) return;
         for (ItemStack item : event.getInventory().getMatrix()) {
             // Yes Bukkit, apparently it can be null...
-            if (item != null && item.getItemMeta().getPersistentDataContainer().has(Crates.CRATE_ID, PersistentDataType.STRING)) {
+            if (item != null && item.getItemMeta().getPersistentDataContainer().has(CrateManager.CRATE_ID, PersistentDataType.STRING)) {
                 event.getInventory().setResult(new ItemStack(Material.AIR));
             }
         }
