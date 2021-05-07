@@ -20,21 +20,21 @@ public class Parser {
         final ItemBuilder builder = new ItemBuilder(material, fc.getInt(path + ".amount", 1));
         // Applying ItemMeta if set
         if (fc.isConfigurationSection(path + ".meta")) {
-            // Applying name
+            // Applying name if set
             if (fc.isString(path + ".meta.name")) {
                 builder.setName(fc.getString(path + ".meta.name"));
             }
-            // Applying lore
+            // Applying lore if set
             if (fc.isList(path + ".meta.lore")) {
                 builder.setLore(fc.getStringList(path + ".meta.lore").toArray(new String[0]));
             }
-            // Applying Enchantment(s)
+            // Applying Enchantment(s) if set
             if (fc.isConfigurationSection(path + ".meta.enchantments")) {
                 for (String enchantment : fc.getConfigurationSection(path + ".meta.enchantments").getKeys(false)) {
                     builder.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft(enchantment)), fc.getInt(path + ".meta.enchantments." + enchantment));
                 }
             }
-            // Applying ItemFlag(s)
+            // Applying ItemFlag(s) if set
             if (fc.isList(path + ".meta.itemflags")) {
                 final List<String> stringItemFlags = fc.getStringList(path + ".meta.itemflags");
                 final ItemFlag[] itemFlags = new ItemFlag[stringItemFlags.size()];
@@ -43,11 +43,11 @@ public class Parser {
                 }
                 builder.setItemFlags(itemFlags);
             }
-            // Applying CustomModelData
+            // Applying CustomModelData if set
             if (fc.isInt(path + ".meta.custom-model-data")) {
                 builder.setCustomModelData(fc.getInt(path + ".meta.custom-model-data"));
             }
-            // Applying skull texture
+            // Applying skull texture if set
             if (material == Material.PLAYER_HEAD && fc.isString(path + ".meta.skull-texture")) {
                 builder.setSkullTexture(fc.getString(path + ".meta.skull-texture"));
             }

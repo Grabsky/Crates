@@ -15,12 +15,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-// Commands could be written in a 'smarter' way, although current code is less confusing.
-// I'm not going to touch them for now.
 public class CratesCommand implements CommandExecutor, TabCompleter {
     private final Crates instance;
     private final CrateManager manager;
@@ -41,7 +38,7 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
             return true;
         } else {
             if (args[0].equalsIgnoreCase("reload")) {
-                if (sender.hasPermission("skydistrict.crates.reload")) {
+                if (sender.hasPermission("skydistrict.command.crates.reload")) {
                     if (instance.reload()) {
                         Lang.send(sender, Lang.RELOAD_SUCCESS);
                         return true;
@@ -52,7 +49,7 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
                 Lang.send(sender, Lang.MISSING_PERMISSIONS);
                 return true;
             } else if (args[0].equalsIgnoreCase("give")) {
-                if (sender.hasPermission("skydistrict.crates.give")) {
+                if (sender.hasPermission("skydistrict.command.crates.give")) {
                     if (args.length > 2) {
                         final Player target = Bukkit.getPlayer(args[1]);
                         if (target != null && target.isOnline()) {
@@ -63,7 +60,7 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
                                     key.setAmount(this.parseIntOrDefault(args[3], 1));
                                 }
                                 target.getInventory().addItem(key);
-                                Lang.send(target, Lang.CRATE_KEY_RECEIVED, crate.getName());
+                                Lang.send(target, Lang.CRATE_KEY_RECEIVED.replace("%crate%", crate.getName()));
                                 return true;
                             }
                             Lang.send(sender, Lang.CRATE_NOT_FOUND);
@@ -79,11 +76,11 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
                 return true;
 
             } else if (args[0].equalsIgnoreCase("giveall")) {
-                if (sender.hasPermission("skydistrict.crates.give.all")) {
+                if (sender.hasPermission("skydistrict.command.crates.giveall")) {
                     if (args.length > 1) {
                         final Crate crate = manager.getCrate(args[1]);
                         if (crate != null) {
-                            final Component component = MiniMessage.get().parse(MessageFormat.format(Lang.CRATE_KEY_RECEIVED.getString(), crate.getName()));
+                            final Component component = MiniMessage.get().parse(Lang.CRATE_KEY_RECEIVED.replace("%crate%", crate.getName()));
                             for (Player target : Bukkit.getOnlinePlayers()) {
                                 final ItemStack key = crate.getCrateKey().clone();
                                 if (args.length > 2) {
@@ -105,13 +102,13 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
 
             } else if (args[0].equalsIgnoreCase("getcrate")) {
                 if (sender instanceof Player) {
-                    if (sender.hasPermission("skydistrict.crates.getcrate")) {
+                    if (sender.hasPermission("skydistrict.command.crates.getcrate")) {
                         if (args.length > 1) {
                             final Crate crate = manager.getCrate(args[1]);
                             if (crate != null) {
                                 final Player player = (Player) sender;
                                 player.getInventory().addItem(crate.getCrateItem());
-                                Lang.send(sender, Lang.CRATE_BLOCK_RECEIVED, crate.getName());
+                                Lang.send(sender, Lang.CRATE_BLOCK_RECEIVED.replace("%crate%", crate.getName()));
                                 return true;
                             }
                             Lang.send(sender, Lang.CRATE_NOT_FOUND);

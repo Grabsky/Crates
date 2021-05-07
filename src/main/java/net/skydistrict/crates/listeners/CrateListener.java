@@ -71,7 +71,7 @@ public class CrateListener implements Listener {
             world.spawnParticle(Particle.ITEM_CRACK, displayLocation, 5, 0.15, 0.15, 0.15, 0.01, item);
             // Making crate available again
             crates.put(location, false);
-        }, Config.OPEN_TIME);
+        }, Config.ANIMATION_TIME);
     }
 
     public void removeDisplayItem() {
@@ -113,7 +113,7 @@ public class CrateListener implements Listener {
                                 // Mark crate as currently occupied
                                 crates.put(location, true);
                                 // Sending player a message
-                                Lang.send(player, Lang.CRATE_OPENED, crate.getName());
+                                Lang.send(player, Lang.CRATE_OPENED.replace("%crate%", crate.getName()));
                                 // Removing 1 key from player's inventory
                                 item.setAmount(item.getAmount() - 1);
                                 // Drawing a reward
@@ -167,7 +167,7 @@ public class CrateListener implements Listener {
         }
     }
 
-    // Prevents crate key from being a crafting ingredient
+    // Prevents crate keys from being a crafting ingredient
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onCraftPrepare(PrepareItemCraftEvent event) {
         if (event.getRecipe() == null) return;

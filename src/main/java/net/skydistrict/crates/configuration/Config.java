@@ -13,9 +13,9 @@ public class Config {
     private final Crates instance;
     private final ConsoleLogger consoleLogger;
     private final File file;
-    private static final int currentVersion = 1;
+    private final int currentVersion = 2;
 
-    public static long OPEN_TIME;
+    public static long ANIMATION_TIME;
 
     public static Sound OPEN_SOUND_TYPE;
     public static float OPEN_SOUND_VOLUME;
@@ -40,7 +40,7 @@ public class Config {
 
     public void reload() {
         // Saving default config
-        if(!file.exists()) {
+        if (!file.exists()) {
             instance.saveResource("config.yml", false);
         }
         // Overriding...
@@ -49,7 +49,7 @@ public class Config {
             consoleLogger.error("Your config.yml file is outdated. Plugin may not work properly.");
         }
         // General
-        OPEN_TIME = fc.getLong("settings.open-time");
+        ANIMATION_TIME = fc.getLong("settings.animation-time");
         // Open sound
         OPEN_SOUND_TYPE = Sound.valueOf(fc.getString("settings.open-sound.type"));
         OPEN_SOUND_VOLUME = (float) fc.getDouble("settings.open-sound.volume");
