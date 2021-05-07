@@ -5,7 +5,6 @@ Simple and efficient crates plugin.
 
 ## Building
 To build, run `mvn install` or `mvn clean install`.  
-Jar file named `Crates-[VERSION].jar` will be placed in `../git-builds/`
 
 ## Permissions
 #### Recommended only for admins:
