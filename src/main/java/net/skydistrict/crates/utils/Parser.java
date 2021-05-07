@@ -1,7 +1,6 @@
 package net.skydistrict.crates.utils;
 
 import me.grabsky.indigo.builders.ItemBuilder;
-import net.skydistrict.crates.Crates;
 import net.skydistrict.crates.crates.CrateManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -48,9 +47,9 @@ public class Parser {
             if (fc.isInt(path + ".meta.custom-model-data")) {
                 builder.setCustomModelData(fc.getInt(path + ".meta.custom-model-data"));
             }
-            // Applying skull texture (value)
-            if (material == Material.PLAYER_HEAD && fc.isString(path + ".meta.skull-value")) {
-                builder.setSkullValue(fc.getString(path + ".meta.skull-value"));
+            // Applying skull texture
+            if (material == Material.PLAYER_HEAD && fc.isString(path + ".meta.skull-texture")) {
+                builder.setSkullTexture(fc.getString(path + ".meta.skull-texture"));
             }
         }
         return builder.build();

@@ -14,7 +14,7 @@
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <builds.local>C:/Users/admin/Development/local</builds.local>
+        <builds.local>C:/Users/admin/Development/builds</builds.local>
     </properties>
 
     <build>
@@ -60,11 +60,6 @@
             <id>papermc-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
-        <!-- Mojang AuthLib -->
-        <repository>
-            <id>mojang-repo</id>
-            <url>https://libraries.minecraft.net/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -75,20 +70,13 @@
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Mojang AuthLib -->
-        <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>authlib</artifactId>
-            <version>1.5.21</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- Indigo -->
         <dependency>
             <groupId>me.grabsky</groupId>
             <artifactId>Indigo</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${builds.local}/Indigo-1.0.0-dev.jar</systemPath>
+            <systemPath>${builds.local}/Indigo-1.1.0-release.jar</systemPath>
         </dependency>
         <!-- Local server jar for NMS -->
         <dependency>
@@ -96,7 +84,7 @@
             <artifactId>server</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${builds.local}/patched_1.16.5.jar</systemPath>
+            <systemPath>${builds.local}/purpur-1.16.5.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

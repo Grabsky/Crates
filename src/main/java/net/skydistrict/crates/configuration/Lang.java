@@ -18,8 +18,7 @@ public class Lang {
     private final Crates instance;
     private final ConsoleLogger consoleLogger;
     private final File file;
-    private static final Component EMPTY_COMPONENT = Component.empty();
-    private static final int LANG_VERSION = 1;
+    private static final int currentVersion = 1;
 
     public static Message
             PLAYER_NOT_FOUND,
@@ -50,7 +49,7 @@ public class Lang {
         }
         // Overriding...
         final FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
-        if (fc.getInt("version") != LANG_VERSION) {
+        if (fc.getInt("version") != currentVersion) {
             consoleLogger.error("Your lang.yml file is outdated. Some messages may not display properly.");
         }
         // General
@@ -100,7 +99,7 @@ public class Lang {
     /** Sends compiled (static) message */
     public static void send(CommandSender sender, Message message) {
         final Component component = message.getComponent();
-        if (component != null && component != EMPTY_COMPONENT) {
+        if (component != null && component != Component.empty()) {
             sender.sendMessage(component);
         }
     }
