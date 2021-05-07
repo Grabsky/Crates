@@ -80,8 +80,9 @@ public class CrateManager {
                 }
                 // Generating rewards pool
                 crates.get(crateId).generateRewardsPool();
+                loaded++;
             }
-            loaded++;
+
         }
         consoleLogger.success("Loaded " + loaded + " crates.");
     }
