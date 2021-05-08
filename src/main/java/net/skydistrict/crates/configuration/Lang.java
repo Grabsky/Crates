@@ -3,13 +3,13 @@ package net.skydistrict.crates.configuration;
 import me.grabsky.indigo.adventure.MiniMessage;
 import me.grabsky.indigo.logger.ConsoleLogger;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.skydistrict.crates.Crates;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class Lang {
     }
 
     private Component component(String path) {
-        return MiniMessage.get().parse(this.string(path));
+        return LegacyComponentSerializer.legacySection().deserialize(this.string(path));
     }
 
     /** Sends parsed component */
@@ -99,7 +99,7 @@ public class Lang {
 
     /** Parses and sends component */
     public static void send(@NotNull CommandSender sender, @NotNull String text) {
-        final Component component = MiniMessage.get().parse(text);
+        final Component component = LegacyComponentSerializer.legacySection().deserialize(text);
         if (component != Component.empty()) {
             sender.sendMessage(component);
         }

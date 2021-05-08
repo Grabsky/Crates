@@ -1,6 +1,6 @@
 version: 2 # Do not modify this unless you know what you're doing
 
-# Following section(s) supports MiniMessage components and classic color codes (§)
+# Following section(s) supports classic color codes (§) and hex colors (§#)
 general:
   player-not-found: '§6§lS§e§lD§8 » §cNie odnaleziono takiego gracza.'
   missing-permissions: '§6§lS§e§lD§8 » §cBrak uprawnień.'
@@ -13,9 +13,9 @@ crates:
   command-help:
     - ''
     - '§8» §e/crates reload§8 - §7Reloads config and rewards'
-    - '§8» §e/crates getcrate§f [crate]§8 - §7Gives you a crate'
-    - '§8» §e/crates give§f [player] [crate] [amount]§8 - §7Gives player key(s)'
-    - '§8» §e/crates giveall§f [crate] [amount]§8 - §7Gives key(s) to online players'
+    - '§8» §e/crates getcrate§f <crate>§8 - §7Gives you a crate'
+    - '§8» §e/crates give§f <player> <crate> [<amount>]§8 - §7Gives player key(s)'
+    - '§8» §e/crates giveall§f <crate> [<amount>]§8 - §7Gives key(s) to online players'
     - ''
   crate-not-found: '§6§lS§e§lD§8 » §cNie odnaleziono takiej skrzynki.'
   crate-placed: '§6§lS§e§lD§8 » §7Skrzynka została postawiona.'
