@@ -48,8 +48,8 @@ public class Parser {
                 builder.setCustomModelData(fc.getInt(path + ".meta.custom-model-data"));
             }
             // Applying skull texture if set
-            if (material == Material.PLAYER_HEAD && fc.isString(path + ".meta.skull-texture")) {
-                builder.setSkullTexture(fc.getString(path + ".meta.skull-texture"));
+            if (material == Material.PLAYER_HEAD && fc.isString(path + ".meta.texture")) {
+                builder.setSkullTexture(fc.getString(path + ".meta.texture"));
             }
         }
         return builder.build();
