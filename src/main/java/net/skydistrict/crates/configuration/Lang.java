@@ -17,7 +17,6 @@ public class Lang {
     private final Crates instance;
     private final ConsoleLogger consoleLogger;
     private final File file;
-    private final int currentVersion = 2;
     private FileConfiguration fileConfiguration;
 
     public static Component PLAYER_NOT_FOUND;
@@ -49,7 +48,7 @@ public class Lang {
         }
         // Overriding...
         this.fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        if (fileConfiguration.getInt("version") != currentVersion) {
+        if (fileConfiguration.getInt("version") != 2) {
             consoleLogger.error("Your lang.yml file is outdated. Some messages may not display properly.");
         }
         // General

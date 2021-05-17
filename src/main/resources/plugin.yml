@@ -3,7 +3,7 @@ version: ${project.version}
 main: net.skydistrict.crates.Crates
 api-version: 1.16
 authors: [Grabsky]
-depends: [Indigo]
+depend: [Indigo]
 permissions:
   skydistrict.command.crates.*:
     description: 'Access all crates commands'

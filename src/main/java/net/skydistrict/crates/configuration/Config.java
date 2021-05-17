@@ -13,8 +13,6 @@ public class Config {
     private final Crates instance;
     private final ConsoleLogger consoleLogger;
     private final File file;
-    private final int currentVersion = 2;
-
     public static long ANIMATION_TIME;
 
     public static Sound OPEN_SOUND_TYPE;
@@ -45,7 +43,7 @@ public class Config {
         }
         // Overriding...
         final FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
-        if (fc.getInt("version") != currentVersion) {
+        if (fc.getInt("version") != 2) {
             consoleLogger.error("Your config.yml file is outdated. Plugin may not work properly.");
         }
         // General

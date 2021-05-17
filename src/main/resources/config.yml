@@ -1,4 +1,4 @@
-version: 1 # Do not modify this unless you know what you're doing
+version: 2 # Do not modify this unless you know what you're doing
 
 settings:
   # How much time crate would be open for. In ticks. (Default: 80 = 4 seconds)
