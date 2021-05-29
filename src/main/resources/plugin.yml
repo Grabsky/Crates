@@ -13,8 +13,3 @@ permissions:
       skydistrict.command.crates.getcrate: false
       skydistrict.command.crates.give: false
       skydistrict.command.crates.giveall: false
-commands:
-  crates:
-    aliases: ['crate', 'skrzynki']
-    permission: 'skydistrict.crates'
-    permission-message: '§6§lS§e§lD§8 » §cBrak uprawnień.'
