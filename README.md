@@ -1,3 +1,5 @@
+#### DISCLAIMER: Resource is no longer maintained due to lack of interest in Minecraft-related development.
+
 # Crates
 Simple and efficient crates plugin.
 
