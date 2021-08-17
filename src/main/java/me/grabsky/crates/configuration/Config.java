@@ -1,7 +1,7 @@
-package net.skydistrict.crates.configuration;
+package me.grabsky.crates.configuration;
 
 import me.grabsky.indigo.logger.ConsoleLogger;
-import net.skydistrict.crates.Crates;
+import me.grabsky.crates.Crates;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;

@@ -1,4 +1,4 @@
-package net.skydistrict.crates.crates;
+package me.grabsky.crates.crates;
 
 import org.bukkit.inventory.ItemStack;
 

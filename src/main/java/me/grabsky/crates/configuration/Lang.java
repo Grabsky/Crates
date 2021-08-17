@@ -1,10 +1,9 @@
-package net.skydistrict.crates.configuration;
+package me.grabsky.crates.configuration;
 
-import me.grabsky.indigo.adventure.MiniMessage;
 import me.grabsky.indigo.logger.ConsoleLogger;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.skydistrict.crates.Crates;
+import me.grabsky.crates.Crates;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

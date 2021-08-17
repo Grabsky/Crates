@@ -1,13 +1,13 @@
-package net.skydistrict.crates.listeners;
+package me.grabsky.crates.listeners;
 
+import me.grabsky.crates.Crates;
+import me.grabsky.crates.configuration.Config;
+import me.grabsky.crates.configuration.Lang;
+import me.grabsky.crates.crates.Crate;
+import me.grabsky.crates.crates.CrateManager;
+import me.grabsky.crates.crates.Reward;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.block.entity.TileEntityChest;
-import net.skydistrict.crates.Crates;
-import net.skydistrict.crates.configuration.Config;
-import net.skydistrict.crates.configuration.Lang;
-import net.skydistrict.crates.crates.Crate;
-import net.skydistrict.crates.crates.CrateManager;
-import net.skydistrict.crates.crates.Reward;
 import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;

@@ -1,9 +1,9 @@
-package net.skydistrict.crates.crates;
+package me.grabsky.crates.crates;
 
 import me.grabsky.indigo.builders.ItemBuilder;
 import me.grabsky.indigo.logger.ConsoleLogger;
-import net.skydistrict.crates.Crates;
-import net.skydistrict.crates.utils.Parser;
+import me.grabsky.crates.Crates;
+import me.grabsky.crates.utils.Parser;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;

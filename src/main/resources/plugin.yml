@@ -1,6 +1,6 @@
 name: Crates
 version: ${project.version}
-main: net.skydistrict.crates.Crates
+main: me.grabsky.crates.Crates
 api-version: 1.16
 authors: [Grabsky]
 depend: [Indigo]

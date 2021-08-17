@@ -1,4 +1,4 @@
-package net.skydistrict.crates.commands;
+package me.grabsky.crates.commands;
 
 import me.grabsky.indigo.adventure.MiniMessage;
 import me.grabsky.indigo.framework.BaseCommand;
@@ -6,11 +6,11 @@ import me.grabsky.indigo.framework.ExecutorType;
 import me.grabsky.indigo.framework.annotations.DefaultCommand;
 import me.grabsky.indigo.framework.annotations.SubCommand;
 import me.grabsky.indigo.utils.Numbers;
+import me.grabsky.crates.Crates;
+import me.grabsky.crates.configuration.Lang;
+import me.grabsky.crates.crates.Crate;
+import me.grabsky.crates.crates.CrateManager;
 import net.kyori.adventure.text.Component;
-import net.skydistrict.crates.Crates;
-import net.skydistrict.crates.configuration.Lang;
-import net.skydistrict.crates.crates.Crate;
-import net.skydistrict.crates.crates.CrateManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
