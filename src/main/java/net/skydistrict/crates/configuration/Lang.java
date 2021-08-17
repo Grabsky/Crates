@@ -24,6 +24,10 @@ public class Lang {
     public static Component PLAYER_ONLY;
     public static Component RELOAD_SUCCESS;
     public static Component RELOAD_FAIL;
+    public static Component INVALID_NUMBER;
+    public static Component USAGE_CRATES_GETCRATE;
+    public static Component USAGE_CRATES_GIVE;
+    public static Component USAGE_CRATES_GIVEALL;
     public static Component NO_SPACE;
     public static Component COMMAND_HELP;
     public static Component CRATE_NOT_FOUND;
@@ -48,7 +52,7 @@ public class Lang {
         }
         // Overriding...
         this.fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        if (fileConfiguration.getInt("version") != 2) {
+        if (fileConfiguration.getInt("version") != 3) {
             consoleLogger.error("Your lang.yml file is outdated. Some messages may not display properly.");
         }
         // General
@@ -58,7 +62,11 @@ public class Lang {
         RELOAD_SUCCESS = this.component("general.reload-success");
         RELOAD_FAIL = this.component("general.reload-fail");
         NO_SPACE = this.component("general.no-space");
+        INVALID_NUMBER = this.component("general.invalid-number");
         // Crates
+        USAGE_CRATES_GETCRATE = this.component("crates.usage.getcrate");
+        USAGE_CRATES_GIVE = this.component("crates.usage.give");
+        USAGE_CRATES_GIVEALL = this.component("crates.usage.giveall");
         COMMAND_HELP = this.component("crates.command-help");
         CRATE_NOT_FOUND = this.component("crates.crate-not-found");
         CRATE_PLACED = this.component("crates.crate-placed");

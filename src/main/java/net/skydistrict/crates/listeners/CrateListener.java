@@ -1,7 +1,7 @@
 package net.skydistrict.crates.listeners;
 
-import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.TileEntityChest;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.world.level.block.entity.TileEntityChest;
 import net.skydistrict.crates.Crates;
 import net.skydistrict.crates.configuration.Config;
 import net.skydistrict.crates.configuration.Lang;
@@ -10,7 +10,7 @@ import net.skydistrict.crates.crates.CrateManager;
 import net.skydistrict.crates.crates.Reward;
 import org.bukkit.*;
 import org.bukkit.block.Chest;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +47,7 @@ public class CrateListener implements Listener {
         // A bunch of variables I can't really get rid of
         final org.bukkit.World world = location.getWorld();
         final Location displayLocation = chest.getLocation().clone().add(0.5, 1, 0.5);
-        final net.minecraft.server.v1_16_R3.World nmsWorld = ((CraftWorld) chest.getWorld()).getHandle();
+        final net.minecraft.world.level.World nmsWorld = ((CraftWorld) chest.getWorld()).getHandle();
         final BlockPosition position = new BlockPosition(location.getX(), location.getY(), location.getZ());
         final TileEntityChest tileChest = (TileEntityChest) nmsWorld.getTileEntity(position);
         // Opening the chest

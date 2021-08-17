@@ -1,6 +1,6 @@
 package net.skydistrict.crates;
 
-import me.grabsky.indigo.acf.PaperCommandManager;
+import me.grabsky.indigo.framework.CommandManager;
 import me.grabsky.indigo.logger.ConsoleLogger;
 import net.skydistrict.crates.commands.CratesCommand;
 import net.skydistrict.crates.configuration.Config;
@@ -15,7 +15,6 @@ public class Crates extends JavaPlugin {
     private ConsoleLogger consoleLogger;
     private Config config;
     private Lang lang;
-    private PaperCommandManager commandManager;
     private CrateListener crateListener;
     private CrateManager crateManager;
     // Getters
@@ -23,7 +22,6 @@ public class Crates extends JavaPlugin {
         return instance;
     }
     public ConsoleLogger getConsoleLogger() { return consoleLogger; }
-    public PaperCommandManager getCommandManager() { return commandManager; }
     public CrateManager getCratesManager() {
         return crateManager;
     }
@@ -36,7 +34,6 @@ public class Crates extends JavaPlugin {
         // Creating instances
         this.config = new Config(this);
         this.lang = new Lang(this);
-        this.commandManager = new PaperCommandManager(this);
         this.crateManager = new CrateManager(this);
         // Reloading configuration files and rewards
         this.reload();
@@ -44,7 +41,8 @@ public class Crates extends JavaPlugin {
         this.crateListener = new CrateListener(this);
         this.getServer().getPluginManager().registerEvents(crateListener, this);
         // Registering command(s)
-        commandManager.registerCommand(new CratesCommand(this));
+        final CommandManager commands = new CommandManager(this);
+        commands.register(new CratesCommand(this));
     }
 
     @Override

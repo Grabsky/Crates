@@ -1,4 +1,4 @@
-version: 2 # Do not modify this unless you know what you're doing
+version: 3 # Do not modify this unless you know what you're doing
 
 # Following section(s) supports classic color codes (§) and hex colors (§#)
 general:
@@ -8,8 +8,13 @@ general:
   reload-success: '§6§lS§e§lD§8 » §7Konfiguracja została pomyślnie przeładowana.'
   reload-fail: '§6§lS§e§lD§8 » §cWystąpił błąd podczas ładowania konfiguracji.'
   no-space: '§6§lS§e§lD§8 » §cNie masz wystarczająco miejsca w ekwipunku.'
+  invalid-number: '§6§lS§e§lD§8 » §cPodana liczba nie jest prawidłowa.'
 
 crates:
+  usage:
+    getcrate: "§6§lS§e§lD§8 » §7Poprawne użycie: §e/crates getcrate§f <crate>"
+    give: "§6§lS§e§lD§8 » §7Poprawne użycie: §e/crates give§f <player> <crate> [<amount>]"
+    giveall: "§6§lS§e§lD§8 » §7Poprawne użycie: §e/crates giveall§f <crate> [<amount>]"
   command-help:
     - ''
     - '§8» §e/crates reload§8 - §7Reloads config and rewards'

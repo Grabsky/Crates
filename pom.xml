@@ -14,7 +14,7 @@
     <properties>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <builds.local>C:/Users/admin/Development/builds</builds.local>
+        <builds.local>D:/java/builds</builds.local>
     </properties>
 
     <build>
@@ -79,9 +79,9 @@
     <dependencies>
         <!-- PaperMC -->
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
+            <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Indigo -->
@@ -98,7 +98,7 @@
             <artifactId>server</artifactId>
             <version>latest</version>
             <scope>system</scope>
-            <systemPath>${builds.local}/purpur-1.16.5.jar</systemPath>
+            <systemPath>${builds.local}/purpur-1.17.1.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

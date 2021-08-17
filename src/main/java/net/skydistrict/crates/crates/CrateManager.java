@@ -1,6 +1,5 @@
 package net.skydistrict.crates.crates;
 
-import me.grabsky.indigo.acf.annotation.Dependency;
 import me.grabsky.indigo.builders.ItemBuilder;
 import me.grabsky.indigo.logger.ConsoleLogger;
 import net.skydistrict.crates.Crates;
@@ -87,7 +86,6 @@ public class CrateManager {
             }
         }
         crateIds = crates.keySet().stream().sorted().toList();
-        instance.getCommandManager().getCommandCompletions().registerAsyncCompletion("crates", c -> crateIds);
         consoleLogger.success("Loaded " + loaded + " crates.");
     }
 }
