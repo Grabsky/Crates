@@ -1,15 +1,16 @@
 package me.grabsky.crates.commands;
 
-import me.grabsky.indigo.adventure.MiniMessage;
-import me.grabsky.indigo.framework.BaseCommand;
-import me.grabsky.indigo.framework.ExecutorType;
-import me.grabsky.indigo.framework.annotations.DefaultCommand;
-import me.grabsky.indigo.framework.annotations.SubCommand;
-import me.grabsky.indigo.utils.Numbers;
 import me.grabsky.crates.Crates;
 import me.grabsky.crates.configuration.Lang;
 import me.grabsky.crates.crates.Crate;
 import me.grabsky.crates.crates.CrateManager;
+import me.grabsky.indigo.configuration.Global;
+import me.grabsky.indigo.framework.commands.BaseCommand;
+import me.grabsky.indigo.framework.commands.ExecutorType;
+import me.grabsky.indigo.framework.commands.annotations.DefaultCommand;
+import me.grabsky.indigo.framework.commands.annotations.SubCommand;
+import me.grabsky.indigo.utils.Components;
+import me.grabsky.indigo.utils.Numbers;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -55,10 +56,10 @@ public class CratesCommand extends BaseCommand {
                                 this.onCratesKeyGive(sender, player, args[2], amount);
                                 return;
                             }
-                            Lang.send(sender, Lang.INVALID_NUMBER);
+                            Lang.send(sender, Global.INVALID_NUMBER);
                             return;
                         }
-                        Lang.send(sender, Lang.PLAYER_NOT_FOUND);
+                        Lang.send(sender, Global.PLAYER_NOT_FOUND);
                         return;
                     }
                     Lang.send(sender, Lang.USAGE_CRATES_GIVE);
@@ -70,7 +71,7 @@ public class CratesCommand extends BaseCommand {
                             this.onCratesKeyGiveAll(sender, args[2], amount);
                             return;
                         }
-                        Lang.send(sender, Lang.INVALID_NUMBER);
+                        Lang.send(sender, Global.INVALID_NUMBER);
                         return;
                     }
                     Lang.send(sender, Lang.USAGE_CRATES_GIVEALL);
@@ -92,9 +93,9 @@ public class CratesCommand extends BaseCommand {
     @SubCommand
     public void onCratesReload(CommandSender sender) {
         if (instance.reload()) {
-            Lang.send(sender, Lang.RELOAD_SUCCESS);
+            Lang.send(sender, Global.RELOAD_SUCCESS);
         } else {
-            Lang.send(sender, Lang.RELOAD_FAIL);
+            Lang.send(sender, Global.RELOAD_FAIL);
         }
     }
 
@@ -116,7 +117,7 @@ public class CratesCommand extends BaseCommand {
     public void onCratesKeyGiveAll(CommandSender sender, String crateId, int amount) {
         final Crate crate = manager.getCrate(crateId);
         if (crate != null) {
-            final Component component = MiniMessage.get().parse(Lang.CRATE_KEY_RECEIVED.replace("%crate%", crate.getName()));
+            final Component component = Components.parse(Lang.CRATE_KEY_RECEIVED.replace("%crate%", crate.getName()));
             for (Player target : Bukkit.getOnlinePlayers()) {
                 final ItemStack key = crate.getCrateKey().clone();
                 key.setAmount(amount);

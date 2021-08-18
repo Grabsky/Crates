@@ -1,12 +1,12 @@
 package me.grabsky.crates;
 
-import me.grabsky.indigo.framework.CommandManager;
-import me.grabsky.indigo.logger.ConsoleLogger;
+import me.grabsky.crates.commands.CratesCommand;
 import me.grabsky.crates.configuration.Config;
 import me.grabsky.crates.configuration.Lang;
 import me.grabsky.crates.crates.CrateManager;
-import me.grabsky.crates.commands.CratesCommand;
 import me.grabsky.crates.listeners.CrateListener;
+import me.grabsky.indigo.framework.commands.CommandManager;
+import me.grabsky.indigo.logger.ConsoleLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Crates extends JavaPlugin {

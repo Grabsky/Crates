@@ -6,6 +6,7 @@ import me.grabsky.crates.configuration.Lang;
 import me.grabsky.crates.crates.Crate;
 import me.grabsky.crates.crates.CrateManager;
 import me.grabsky.crates.crates.Reward;
+import me.grabsky.indigo.configuration.Global;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.block.entity.TileEntityChest;
 import org.bukkit.*;
@@ -140,7 +141,7 @@ public class CrateListener implements Listener {
                         return;
                     }
                     player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-                    Lang.send(player, Lang.NO_SPACE);
+                    Lang.send(player, Global.NO_INVENTORY_SPACE);
                     return;
                 }
             }
