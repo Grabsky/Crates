@@ -1,7 +1,7 @@
 package me.grabsky.crates.commands;
 
 import me.grabsky.crates.Crates;
-import me.grabsky.crates.configuration.Lang;
+import me.grabsky.crates.configuration.CratesLang;
 import me.grabsky.crates.crates.Crate;
 import me.grabsky.crates.crates.CrateManager;
 import me.grabsky.indigo.configuration.Global;
@@ -34,6 +34,11 @@ public class CratesCommand extends BaseCommand {
     }
 
     @Override
+    public List<String> tabComplete(CommandSender sender, String arg, int index) {
+        return null;
+    }
+
+    @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
             this.onCrates(sender);
@@ -45,87 +50,69 @@ public class CratesCommand extends BaseCommand {
                         this.onCratesGet(sender, args[1]);
                         return;
                     }
-                    Lang.send(sender, Lang.USAGE_CRATES_GETCRATE);
+                    CratesLang.send(sender, CratesLang.USAGE_CRATES_GETCRATE);
                 }
                 case "give" -> {
                     if (args.length == 4) {
-                        final Player player = Bukkit.getPlayer(args[1]);
-                        if (player != null && player.isOnline()) {
-                            final Integer amount = Numbers.parseInt(args[3]);
-                            if (amount != null) {
-                                this.onCratesKeyGive(sender, player, args[2], amount);
-                                return;
-                            }
-                            Lang.send(sender, Global.INVALID_NUMBER);
-                            return;
-                        }
-                        Lang.send(sender, Global.PLAYER_NOT_FOUND);
+                        this.onCratesKeyGive(sender, args[1], args[2], args[3]);
                         return;
                     }
-                    Lang.send(sender, Lang.USAGE_CRATES_GIVE);
+                    CratesLang.send(sender, CratesLang.USAGE_CRATES_GIVE);
                 }
                 case "giveall" -> {
                     if (args.length == 3) {
-                        final Integer amount = Numbers.parseInt(args[3]);
-                        if (amount != null) {
-                            this.onCratesKeyGiveAll(sender, args[2], amount);
-                            return;
-                        }
-                        Lang.send(sender, Global.INVALID_NUMBER);
+                        this.onCratesKeyGiveAll(sender, args[2], args[3]);
                         return;
                     }
-                    Lang.send(sender, Lang.USAGE_CRATES_GIVEALL);
+                    CratesLang.send(sender, CratesLang.USAGE_CRATES_GIVEALL);
                 }
             }
         }
     }
 
-    @Override
-    public List<String> tabComplete(CommandSender sender, String arg, int index) {
-        return null;
-    }
-
     @DefaultCommand
     public void onCrates(CommandSender sender) {
-        Lang.send(sender, Lang.COMMAND_HELP);
+        CratesLang.send(sender, CratesLang.COMMAND_HELP);
     }
 
     @SubCommand
     public void onCratesReload(CommandSender sender) {
         if (instance.reload()) {
-            Lang.send(sender, Global.RELOAD_SUCCESS);
+            CratesLang.send(sender, Global.RELOAD_SUCCESS);
         } else {
-            Lang.send(sender, Global.RELOAD_FAIL);
+            CratesLang.send(sender, Global.RELOAD_FAIL);
         }
     }
 
     @SubCommand
-    public void onCratesKeyGive(CommandSender sender, Player player, String crateId, int amount) {
-        final Player p = player.getPlayer();
-        final Crate crate = manager.getCrate(crateId);
-        if (crate != null) {
-            final ItemStack key = crate.getCrateKey().clone();
-            key.setAmount(amount);
-            p.getInventory().addItem(key);
-            Lang.send(p, Lang.CRATE_KEY_RECEIVED.replace("%crate%", crate.getName()));
-        } else {
-            Lang.send(sender, Lang.CRATE_NOT_FOUND);
+    public void onCratesKeyGive(CommandSender sender, String playerName, String crateId, String amountString) {
+        final Player player = Bukkit.getPlayer(playerName);
+        if (player != null && player.isOnline()) {
+            final Crate crate = manager.getCrate(crateId);
+            if (crate != null) {
+                final ItemStack key = crate.getCrateKey().clone();
+                key.setAmount(Numbers.parseInt(amountString, 1));
+                player.getInventory().addItem(key);
+                CratesLang.send(player, CratesLang.CRATE_KEY_RECEIVED.replace("{crate}", crate.getName()));
+            } else {
+                CratesLang.send(sender, CratesLang.CRATE_NOT_FOUND);
+            }
         }
     }
 
     @SubCommand
-    public void onCratesKeyGiveAll(CommandSender sender, String crateId, int amount) {
+    public void onCratesKeyGiveAll(CommandSender sender, String crateId, String amountString) {
         final Crate crate = manager.getCrate(crateId);
         if (crate != null) {
-            final Component component = Components.parse(Lang.CRATE_KEY_RECEIVED.replace("%crate%", crate.getName()));
+            final Component component = Components.parseSection(CratesLang.CRATE_KEY_RECEIVED.replace("{crate}", crate.getName()));
             for (Player target : Bukkit.getOnlinePlayers()) {
                 final ItemStack key = crate.getCrateKey().clone();
-                key.setAmount(amount);
+                key.setAmount(Numbers.parseInt(amountString, 1));
                 target.getInventory().addItem(key);
                 target.sendMessage(component);
             }
         } else {
-            Lang.send(sender, Lang.CRATE_NOT_FOUND);
+            CratesLang.send(sender, CratesLang.CRATE_NOT_FOUND);
         }
     }
 
@@ -135,9 +122,9 @@ public class CratesCommand extends BaseCommand {
         if (crate != null) {
             final Player player = (Player) sender;
             player.getInventory().addItem(crate.getCrateItem());
-            Lang.send(sender, Lang.CRATE_BLOCK_RECEIVED.replace("%crate%", crate.getName()));
+            CratesLang.send(sender, CratesLang.CRATE_BLOCK_RECEIVED.replace("{crate}", crate.getName()));
         } else {
-            Lang.send(sender, Lang.CRATE_NOT_FOUND);
+            CratesLang.send(sender, CratesLang.CRATE_NOT_FOUND);
         }
     }
 }

@@ -1,8 +1,8 @@
 package me.grabsky.crates.listeners;
 
 import me.grabsky.crates.Crates;
-import me.grabsky.crates.configuration.Config;
-import me.grabsky.crates.configuration.Lang;
+import me.grabsky.crates.configuration.CratesConfig;
+import me.grabsky.crates.configuration.CratesLang;
 import me.grabsky.crates.crates.Crate;
 import me.grabsky.crates.crates.CrateManager;
 import me.grabsky.crates.crates.Reward;
@@ -60,8 +60,8 @@ public class CrateListener implements Listener {
         // Adding item to a list (so we can remove it on plugin disable)
         displayItems.add(displayItem);
         // Playing sound and displaying particles
-        world.playSound(location, Config.OPEN_SOUND_TYPE, Config.OPEN_SOUND_VOLUME, Config.OPEN_SOUND_PITCH);
-        world.spawnParticle(Config.PARTICLES_TYPE, displayLocation, Config.PARTICLES_AMOUNT, Config.PARTICLES_OFFSET_X, Config.PARTICLES_OFFSET_Y, Config.PARTICLES_OFFSET_Z, Config.PARTICLES_SPEED);
+        world.playSound(location, CratesConfig.OPEN_SOUND_TYPE, CratesConfig.OPEN_SOUND_VOLUME, CratesConfig.OPEN_SOUND_PITCH);
+        world.spawnParticle(CratesConfig.PARTICLES_TYPE, displayLocation, CratesConfig.PARTICLES_AMOUNT, CratesConfig.PARTICLES_OFFSET_X, CratesConfig.PARTICLES_OFFSET_Y, CratesConfig.PARTICLES_OFFSET_Z, CratesConfig.PARTICLES_SPEED);
         // Closing chest and removing item after X ticks (80 by default)
         Bukkit.getScheduler().runTaskLater(instance, () -> {
             nmsWorld.playBlockAction(position, tileChest.getBlock().getBlock(), 1, 0);
@@ -72,7 +72,7 @@ public class CrateListener implements Listener {
             world.spawnParticle(Particle.ITEM_CRACK, displayLocation, 5, 0.15, 0.15, 0.15, 0.01, item);
             // Making crate available again
             crates.put(location, false);
-        }, Config.ANIMATION_TIME);
+        }, CratesConfig.ANIMATION_TIME);
     }
 
     public void removeDisplayItem() {
@@ -114,7 +114,7 @@ public class CrateListener implements Listener {
                                 // Mark crate as currently occupied
                                 crates.put(location, true);
                                 // Sending player a message
-                                Lang.send(player, Lang.CRATE_OPENED.replace("%crate%", crate.getName()));
+                                CratesLang.send(player, CratesLang.CRATE_OPENED.replace("{crate}", crate.getName()));
                                 // Removing 1 key from player's inventory
                                 item.setAmount(item.getAmount() - 1);
                                 // Drawing a reward
@@ -126,28 +126,28 @@ public class CrateListener implements Listener {
                                 // Executing commands
                                 if (reward.hasConsoleCommands()) {
                                     for (String c : reward.getConsoleCommands()) {
-                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c.replaceAll("%player%", player.getName()));
+                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c.replace("{player}", player.getName()));
                                     }
                                 }
                                 this.openAnimation(chest, location, reward.getItem());
                                 return;
                             }
-                            player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-                            Lang.send(player, Lang.CRATE_OCCUPIED);
+                            player.playSound(player.getLocation(), CratesConfig.MISSING_KEY_SOUND_TYPE, CratesConfig.MISSING_KEY_SOUND_VOLUME, CratesConfig.MISSING_KEY_SOUND_PITCH);
+                            CratesLang.send(player, CratesLang.CRATE_OCCUPIED);
                             return;
                         }
-                        player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-                        Lang.send(player, Lang.CRATE_NOT_FOUND);
+                        player.playSound(player.getLocation(), CratesConfig.MISSING_KEY_SOUND_TYPE, CratesConfig.MISSING_KEY_SOUND_VOLUME, CratesConfig.MISSING_KEY_SOUND_PITCH);
+                        CratesLang.send(player, CratesLang.CRATE_NOT_FOUND);
                         return;
                     }
-                    player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-                    Lang.send(player, Global.NO_INVENTORY_SPACE);
+                    player.playSound(player.getLocation(), CratesConfig.MISSING_KEY_SOUND_TYPE, CratesConfig.MISSING_KEY_SOUND_VOLUME, CratesConfig.MISSING_KEY_SOUND_PITCH);
+                    CratesLang.send(player, Global.NO_INVENTORY_SPACE);
                     return;
                 }
             }
         }
-        player.playSound(player.getLocation(), Config.MISSING_KEY_SOUND_TYPE, Config.MISSING_KEY_SOUND_VOLUME, Config.MISSING_KEY_SOUND_PITCH);
-        Lang.send(player, Lang.CRATE_MISSING_KEY);
+        player.playSound(player.getLocation(), CratesConfig.MISSING_KEY_SOUND_TYPE, CratesConfig.MISSING_KEY_SOUND_VOLUME, CratesConfig.MISSING_KEY_SOUND_PITCH);
+        CratesLang.send(player, CratesLang.CRATE_MISSING_KEY);
     }
 
     @EventHandler
@@ -164,7 +164,7 @@ public class CrateListener implements Listener {
             final Chest chest = (Chest) event.getBlockPlaced().getState();
             chest.getPersistentDataContainer().set(CrateManager.CRATE_ID, PersistentDataType.STRING, crateId);
             chest.update();
-            Lang.send(event.getPlayer(), Lang.CRATE_PLACED);
+            CratesLang.send(event.getPlayer(), CratesLang.CRATE_PLACED);
         }
     }
 

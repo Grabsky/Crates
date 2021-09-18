@@ -1,8 +1,8 @@
 package me.grabsky.crates;
 
 import me.grabsky.crates.commands.CratesCommand;
-import me.grabsky.crates.configuration.Config;
-import me.grabsky.crates.configuration.Lang;
+import me.grabsky.crates.configuration.CratesConfig;
+import me.grabsky.crates.configuration.CratesLang;
 import me.grabsky.crates.crates.CrateManager;
 import me.grabsky.crates.listeners.CrateListener;
 import me.grabsky.indigo.framework.commands.CommandManager;
@@ -13,8 +13,8 @@ public class Crates extends JavaPlugin {
     // Instances
     private static Crates instance;
     private ConsoleLogger consoleLogger;
-    private Config config;
-    private Lang lang;
+    private CratesConfig config;
+    private CratesLang lang;
     private CrateListener crateListener;
     private CrateManager crateManager;
     // Getters
@@ -32,8 +32,8 @@ public class Crates extends JavaPlugin {
         instance = this;
         this.consoleLogger = new ConsoleLogger(this);
         // Creating instances
-        this.config = new Config(this);
-        this.lang = new Lang(this);
+        this.config = new CratesConfig(this);
+        this.lang = new CratesLang(this);
         this.crateManager = new CrateManager(this);
         // Reloading configuration files and rewards
         this.reload();

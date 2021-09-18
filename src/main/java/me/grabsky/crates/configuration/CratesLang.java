@@ -1,6 +1,7 @@
 package me.grabsky.crates.configuration;
 
 import me.grabsky.crates.Crates;
+import me.grabsky.indigo.configuration.Global;
 import me.grabsky.indigo.framework.lang.AbstractLang;
 import me.grabsky.indigo.logger.ConsoleLogger;
 import net.kyori.adventure.text.Component;
@@ -8,7 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public class Lang extends AbstractLang {
+public class CratesLang extends AbstractLang {
     private final Crates instance;
     private final ConsoleLogger consoleLogger;
     private final File file;
@@ -26,7 +27,7 @@ public class Lang extends AbstractLang {
     public static String CRATE_BLOCK_RECEIVED;
     public static String CRATE_OPENED;
 
-    public Lang(Crates instance) {
+    public CratesLang(Crates instance) {
         super(instance);
         this.instance = instance;
         this.consoleLogger = instance.getConsoleLogger();
@@ -41,8 +42,8 @@ public class Lang extends AbstractLang {
         }
         // Overriding...
         this.fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        if (fileConfiguration.getInt("version") != 4) {
-            consoleLogger.error("Your lang.yml file is outdated. Some messages may not display properly.");
+        if (fileConfiguration.getInt("version") != 5) {
+            consoleLogger.error(Global.OUTDATED_LANG);
         }
         // Crates
         USAGE_CRATES_GETCRATE = this.component("crates.usage.getcrate");

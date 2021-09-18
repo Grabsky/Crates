@@ -1,7 +1,8 @@
 package me.grabsky.crates.configuration;
 
-import me.grabsky.indigo.logger.ConsoleLogger;
 import me.grabsky.crates.Crates;
+import me.grabsky.indigo.configuration.Global;
+import me.grabsky.indigo.logger.ConsoleLogger;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -9,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public class Config {
+public class CratesConfig {
     private final Crates instance;
     private final ConsoleLogger consoleLogger;
     private final File file;
@@ -30,7 +31,7 @@ public class Config {
     public static double PARTICLES_OFFSET_Y;
     public static double PARTICLES_OFFSET_Z;
 
-    public Config(Crates instance) {
+    public CratesConfig(Crates instance) {
         this.instance = instance;
         this.consoleLogger = instance.getConsoleLogger();
         this.file = new File(instance.getDataFolder() + File.separator + "config.yml");
@@ -44,7 +45,7 @@ public class Config {
         // Overriding...
         final FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
         if (fc.getInt("version") != 2) {
-            consoleLogger.error("Your config.yml file is outdated. Plugin may not work properly.");
+            consoleLogger.error(Global.OUTDATED_CONFIG);
         }
         // General
         ANIMATION_TIME = fc.getLong("settings.animation-time");

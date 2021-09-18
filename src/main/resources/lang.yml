@@ -1,4 +1,4 @@
-version: 4 # Do not modify this unless you know what you're doing
+version: 5 # Do not modify this unless you know what you're doing
 
 # Following section(s) supports classic color codes (§) and hex colors (§#)
 crates:
@@ -15,8 +15,8 @@ crates:
     - ''
   crate-not-found: '§6§lS§e§lD§8 » §cNie odnaleziono takiej skrzynki.'
   crate-placed: '§6§lS§e§lD§8 » §7Skrzynka została postawiona.'
-  crate-opened: '§6§lS§e§lD§8 » §7Otworzyłeś skrzynkę %crate%§7.'
+  crate-opened: '§6§lS§e§lD§8 » §7Otworzyłeś skrzynkę {crate}§7.'
   crate-missing-key: '§6§lS§e§lD§8 » §cNie posiadasz klucza do tej skrzynki.'
-  crate-key-received: '§6§lS§e§lD§8 » §7Otrzymałeś klucz do skrzynki %crate%§7.'
-  crate-block-received: '§6§lS§e§lD§8 » §7Otrzymałeś skrzynkę %crate%§7.'
+  crate-key-received: '§6§lS§e§lD§8 » §7Otrzymałeś klucz do skrzynki {crate}§7.'
+  crate-block-received: '§6§lS§e§lD§8 » §7Otrzymałeś skrzynkę {crate}§7.'
   crate-occupied: '§6§lS§e§lD§8 » §cTa skrzynka jest teraz zajęta.'
