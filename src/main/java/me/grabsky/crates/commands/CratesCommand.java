@@ -9,6 +9,7 @@ import me.grabsky.indigo.framework.commands.BaseCommand;
 import me.grabsky.indigo.framework.commands.ExecutorType;
 import me.grabsky.indigo.framework.commands.annotations.DefaultCommand;
 import me.grabsky.indigo.framework.commands.annotations.SubCommand;
+import me.grabsky.indigo.user.UserCache;
 import me.grabsky.indigo.utils.Components;
 import me.grabsky.indigo.utils.Numbers;
 import net.kyori.adventure.text.Component;
@@ -18,9 +19,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-// TO-DO: Context-aware tab completions
 public class CratesCommand extends BaseCommand {
     private final Crates instance;
     private final CrateManager manager;
@@ -30,12 +31,31 @@ public class CratesCommand extends BaseCommand {
         super("crates", Arrays.asList("crate", "skrzynki"), "skydistrict.command.crates", ExecutorType.ALL);
         this.instance = instance;
         this.manager = instance.getCratesManager();
-        this.subCommands = Arrays.asList("getcrate", "give", "giveall", "reload");
+        this.subCommands = List.of("getcrate", "give", "giveall", "reload");
     }
 
     @Override
     public List<String> tabComplete(CommandSender sender, String arg, int index) {
-        return null;
+        if (index == 0) return subCommands;
+        switch (arg) {
+            case "getcrate" -> {
+                if (index == 1) return manager.getCrateIds();
+            }
+            case "give" -> {
+                if (index == 1) return UserCache.getNamesOfOnlineUsers();
+                if (index == 2) return manager.getCrateIds();
+                if (index == 3) return List.of("1");
+
+            }
+            case "giveall" -> {
+                if (index == 1) return manager.getCrateIds();
+                if (index == 2) return List.of("1");
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
+        return Collections.emptyList();
     }
 
     @Override
@@ -61,7 +81,7 @@ public class CratesCommand extends BaseCommand {
                 }
                 case "giveall" -> {
                     if (args.length == 3) {
-                        this.onCratesKeyGiveAll(sender, args[2], args[3]);
+                        this.onCratesKeyGiveAll(sender, args[1], args[2]);
                         return;
                     }
                     CratesLang.send(sender, CratesLang.USAGE_CRATES_GIVEALL);

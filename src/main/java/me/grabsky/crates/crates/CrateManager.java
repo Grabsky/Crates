@@ -1,9 +1,9 @@
 package me.grabsky.crates.crates;
 
-import me.grabsky.indigo.builders.ItemBuilder;
-import me.grabsky.indigo.logger.ConsoleLogger;
 import me.grabsky.crates.Crates;
 import me.grabsky.crates.utils.Parser;
+import me.grabsky.indigo.builders.ItemBuilder;
+import me.grabsky.indigo.logger.ConsoleLogger;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,7 +17,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class CrateManager {
     private final Crates instance;
@@ -26,9 +25,9 @@ public class CrateManager {
     private final File cratesDirectory;
     private final File defaultCrateFile;
 
-    public static NamespacedKey CRATE_ID;
-
     private List<String> crateIds;
+
+    public static NamespacedKey CRATE_ID;
 
     public CrateManager(Crates instance) {
         this.instance = instance;
@@ -43,8 +42,8 @@ public class CrateManager {
         return crates.get(id);
     }
 
-    public Set<String> getCrateIds() {
-        return crates.keySet();
+    public List<String> getCrateIds() {
+        return crateIds;
     }
 
     public void reloadRewards() {
