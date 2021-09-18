@@ -10,8 +10,8 @@ To build, run `mvn install` or `mvn clean install`.
 #### Recommended only for admins:
 Permission | Description
 --- | ---
-`skydistrict.command.crates` | Using `/crates` command.
-`skydistrict.command.crates.getcrate` | Using `/crates getcrate` command.
-`skydistrict.command.crates.give` | Using `/crates give` command.
-`skydistrict.command.crates.giveall` | Using `/crates giveall` command.
-`skydistrict.command.crates.reload` | Using `/crates reload` command.
+`crates.command.crates` | Using `/crates` command.
+`crates.command.crates.getcrate` | Using `/crates getcrate` command.
+`crates.command.crates.give` | Using `/crates give` command.
+`crates.command.crates.giveall` | Using `/crates giveall` command.
+`crates.command.crates.reload` | Using `/crates reload` command.

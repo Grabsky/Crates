@@ -28,7 +28,7 @@ public class CratesCommand extends BaseCommand {
     private final List<String> subCommands;
 
     public CratesCommand(Crates instance) {
-        super("crates", Arrays.asList("crate", "skrzynki"), "skydistrict.command.crates", ExecutorType.ALL);
+        super("crates", Arrays.asList("crate", "skrzynki"), "crates.command.crates", ExecutorType.ALL);
         this.instance = instance;
         this.manager = instance.getCratesManager();
         this.subCommands = List.of("getcrate", "give", "giveall", "reload");
@@ -96,55 +96,73 @@ public class CratesCommand extends BaseCommand {
     }
 
     @SubCommand
-    public void onCratesReload(CommandSender sender) {
-        if (instance.reload()) {
-            CratesLang.send(sender, Global.RELOAD_SUCCESS);
-        } else {
-            CratesLang.send(sender, Global.RELOAD_FAIL);
+    public void onCratesGet(CommandSender sender, String crateId) {
+        if (sender.hasPermission("crates.command.getcrate")) {
+            final Crate crate = manager.getCrate(crateId);
+            if (crate != null) {
+                final Player player = (Player) sender;
+                player.getInventory().addItem(crate.getCrateItem());
+                CratesLang.send(sender, CratesLang.CRATE_BLOCK_RECEIVED.replace("{crate}", crate.getName()));
+                return;
+            }
+            CratesLang.send(sender, CratesLang.CRATE_NOT_FOUND);
+            return;
         }
+        CratesLang.send(sender, Global.MISSING_PERMISSIONS);
     }
 
     @SubCommand
     public void onCratesKeyGive(CommandSender sender, String playerName, String crateId, String amountString) {
-        final Player player = Bukkit.getPlayer(playerName);
-        if (player != null && player.isOnline()) {
-            final Crate crate = manager.getCrate(crateId);
-            if (crate != null) {
-                final ItemStack key = crate.getCrateKey().clone();
-                key.setAmount(Numbers.parseInt(amountString, 1));
-                player.getInventory().addItem(key);
-                CratesLang.send(player, CratesLang.CRATE_KEY_RECEIVED.replace("{crate}", crate.getName()));
-            } else {
+        if (sender.hasPermission("crates.command.crates.give")) {
+            final Player player = Bukkit.getPlayer(playerName);
+            if (player != null && player.isOnline()) {
+                final Crate crate = manager.getCrate(crateId);
+                if (crate != null) {
+                    final ItemStack key = crate.getCrateKey().clone();
+                    key.setAmount(Numbers.parseInt(amountString, 1));
+                    player.getInventory().addItem(key);
+                    CratesLang.send(player, CratesLang.CRATE_KEY_RECEIVED.replace("{crate}", crate.getName()));
+                    return;
+                }
                 CratesLang.send(sender, CratesLang.CRATE_NOT_FOUND);
+                return;
             }
+            CratesLang.send(sender, Global.PLAYER_NOT_FOUND);
+            return;
         }
+        CratesLang.send(sender, Global.MISSING_PERMISSIONS);
     }
 
     @SubCommand
     public void onCratesKeyGiveAll(CommandSender sender, String crateId, String amountString) {
-        final Crate crate = manager.getCrate(crateId);
-        if (crate != null) {
-            final Component component = Components.parseSection(CratesLang.CRATE_KEY_RECEIVED.replace("{crate}", crate.getName()));
-            for (Player target : Bukkit.getOnlinePlayers()) {
-                final ItemStack key = crate.getCrateKey().clone();
-                key.setAmount(Numbers.parseInt(amountString, 1));
-                target.getInventory().addItem(key);
-                target.sendMessage(component);
+        if (sender.hasPermission("crates.command.giveall")) {
+            final Crate crate = manager.getCrate(crateId);
+            if (crate != null) {
+                final Component component = Components.parseSection(CratesLang.CRATE_KEY_RECEIVED.replace("{crate}", crate.getName()));
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    final ItemStack key = crate.getCrateKey().clone();
+                    key.setAmount(Numbers.parseInt(amountString, 1));
+                    target.getInventory().addItem(key);
+                    target.sendMessage(component);
+                }
+                return;
             }
-        } else {
             CratesLang.send(sender, CratesLang.CRATE_NOT_FOUND);
+            return;
         }
+        CratesLang.send(sender, Global.MISSING_PERMISSIONS);
     }
 
     @SubCommand
-    public void onCratesGet(CommandSender sender, String crateId) {
-        final Crate crate = manager.getCrate(crateId);
-        if (crate != null) {
-            final Player player = (Player) sender;
-            player.getInventory().addItem(crate.getCrateItem());
-            CratesLang.send(sender, CratesLang.CRATE_BLOCK_RECEIVED.replace("{crate}", crate.getName()));
-        } else {
-            CratesLang.send(sender, CratesLang.CRATE_NOT_FOUND);
+    public void onCratesReload(CommandSender sender) {
+        if (sender.hasPermission("crates.command.crates.reload")) {
+            if (instance.reload()) {
+                CratesLang.send(sender, Global.RELOAD_SUCCESS);
+                return;
+            }
+            CratesLang.send(sender, Global.RELOAD_FAIL);
+            return;
         }
+        CratesLang.send(sender, Global.MISSING_PERMISSIONS);
     }
 }

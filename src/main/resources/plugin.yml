@@ -5,11 +5,10 @@ api-version: 1.16
 authors: [Grabsky]
 depend: [Indigo]
 permissions:
-  skydistrict.command.crates.*:
-    description: 'Access all crates commands'
+  crates.command.crates.*:
     childern:
-      skydistrict.command.crates: false
-      skydistrict.command.crates.reload: false
-      skydistrict.command.crates.getcrate: false
-      skydistrict.command.crates.give: false
-      skydistrict.command.crates.giveall: false
+      crates.command.crates: false
+      crates.command.crates.getcrate: false
+      crates.command.crates.give: false
+      crates.command.crates.giveall: false
+      crates.command.crates.reload: false
