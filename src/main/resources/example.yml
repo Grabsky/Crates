@@ -24,7 +24,7 @@ rewards:
         itemflags:
           - 'HIDE_ENCHANTS'
     commands:
-      - 'tell %player% Wow, congrats!'
+      - 'tell {player} Wow, congrats!'
   '1':
     weight: 5
     item:
