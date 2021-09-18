@@ -9,7 +9,6 @@ import me.grabsky.indigo.framework.commands.BaseCommand;
 import me.grabsky.indigo.framework.commands.ExecutorType;
 import me.grabsky.indigo.framework.commands.annotations.DefaultCommand;
 import me.grabsky.indigo.framework.commands.annotations.SubCommand;
-import me.grabsky.indigo.user.UserCache;
 import me.grabsky.indigo.utils.Components;
 import me.grabsky.indigo.utils.Numbers;
 import net.kyori.adventure.text.Component;
@@ -42,7 +41,7 @@ public class CratesCommand extends BaseCommand {
                 if (index == 1) return manager.getCrateIds();
             }
             case "give" -> {
-                if (index == 1) return UserCache.getNamesOfOnlineUsers();
+                if (index == 1) return null;
                 if (index == 2) return manager.getCrateIds();
                 if (index == 3) return List.of("1");
 

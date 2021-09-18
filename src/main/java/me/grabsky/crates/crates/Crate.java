@@ -11,7 +11,7 @@ public class Crate {
     private final ItemStack crateKey;
     private final ItemStack crateItem;
     private final List<Reward> rewards;
-    private List<Integer> rewardPool;
+    private final List<Integer> rewardPool;
 
     public Crate(String name, ItemStack crateKey, ItemStack crateItem) {
         this.name = name;
