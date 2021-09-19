@@ -15,9 +15,6 @@ public class CratesLang extends AbstractLang {
     private final File file;
 
     public static Component COMMAND_HELP;
-    public static Component USAGE_CRATES_GETCRATE;
-    public static Component USAGE_CRATES_GIVE;
-    public static Component USAGE_CRATES_GIVEALL;
     public static Component CRATE_NOT_FOUND;
     public static Component CRATE_PLACED;
     public static Component CRATE_MISSING_KEY;
@@ -42,13 +39,10 @@ public class CratesLang extends AbstractLang {
         }
         // Overriding...
         this.fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        if (fileConfiguration.getInt("version") != 5) {
+        if (fileConfiguration.getInt("version") != 6) {
             consoleLogger.error(Global.OUTDATED_LANG);
         }
         // Crates
-        USAGE_CRATES_GETCRATE = this.component("crates.usage.getcrate");
-        USAGE_CRATES_GIVE = this.component("crates.usage.give");
-        USAGE_CRATES_GIVEALL = this.component("crates.usage.giveall");
         COMMAND_HELP = this.component("crates.command-help");
         CRATE_NOT_FOUND = this.component("crates.crate-not-found");
         CRATE_PLACED = this.component("crates.crate-placed");

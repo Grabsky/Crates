@@ -8,7 +8,7 @@ permissions:
   crates.command.crates.*:
     childern:
       crates.command.crates: false
-      crates.command.crates.getcrate: false
+      crates.command.crates.get: false
       crates.command.crates.give: false
       crates.command.crates.giveall: false
       crates.command.crates.reload: false

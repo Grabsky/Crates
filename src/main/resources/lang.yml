@@ -1,11 +1,7 @@
-version: 5 # Do not modify this unless you know what you're doing
+version: 6 # Do not modify this unless you know what you're doing
 
 # Following section(s) supports classic color codes (§) and hex colors (§#)
 crates:
-  usage:
-    getcrate: "§6§lS§e§lD§8 » §7Poprawne użycie: §e/crates getcrate§f <crate>"
-    give: "§6§lS§e§lD§8 » §7Poprawne użycie: §e/crates give§f <player> <crate> [<amount>]"
-    giveall: "§6§lS§e§lD§8 » §7Poprawne użycie: §e/crates giveall§f <crate> [<amount>]"
   command-help:
     - ''
     - '§8» §e/crates reload§8 - §7Reloads config and rewards'
