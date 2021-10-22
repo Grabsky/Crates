@@ -1,18 +1,19 @@
 package me.grabsky.crates.crates;
 
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class Reward {
     private final int weight;
-    private final ItemStack item;
-    private final List<String> consoleCommands;
+    private final ItemStack previewItem;
+    private final int previewSlot;
+    private final boolean givePreviewItemAsReward;
+    private final String[] consoleCommands;
 
-    public Reward(int weight, @Nullable ItemStack item, @Nullable List<String> consoleCommands) {
-        this.item = item;
+    public Reward(int weight, int previewSlot, ItemStack previewItem, boolean givePreviewItemAsReward, String[] consoleCommands) {
         this.weight = weight;
+        this.previewSlot = previewSlot;
+        this.previewItem = previewItem;
+        this.givePreviewItemAsReward = givePreviewItemAsReward;
         this.consoleCommands = consoleCommands;
     }
 
@@ -20,19 +21,27 @@ public class Reward {
         return weight;
     }
 
-    public ItemStack getItem() {
-        return item;
+    public ItemStack getPreviewItem() {
+        return previewItem;
     }
 
-    public List<String> getConsoleCommands() {
+    public int getPreviewSlot() {
+        return previewSlot;
+    }
+
+    public ItemStack getItem() {
+        return (givePreviewItemAsReward) ? previewItem : null;
+    }
+
+    public String[] getConsoleCommands() {
         return consoleCommands;
     }
 
     public boolean hasItem() {
-        return item != null;
+        return givePreviewItemAsReward;
     }
 
     public boolean hasConsoleCommands() {
-        return (consoleCommands != null && !consoleCommands.isEmpty());
+        return (consoleCommands != null && consoleCommands.length > 0);
     }
 }

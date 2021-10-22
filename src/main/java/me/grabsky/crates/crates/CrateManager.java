@@ -1,15 +1,15 @@
 package me.grabsky.crates.crates;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.grabsky.crates.Crates;
-import me.grabsky.crates.utils.Parser;
-import me.grabsky.indigo.builders.ItemBuilder;
+import me.grabsky.crates.crates.json.JsonCrate;
+import me.grabsky.crates.crates.json.JsonReward;
 import me.grabsky.indigo.logger.ConsoleLogger;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +21,7 @@ import java.util.Map;
 public class CrateManager {
     private final Crates instance;
     private final ConsoleLogger consoleLogger;
+    private final Gson gson;
     private final Map<String, Crate> crates;
     private final File cratesDirectory;
     private final File defaultCrateFile;
@@ -32,9 +33,13 @@ public class CrateManager {
     public CrateManager(Crates instance) {
         this.instance = instance;
         this.consoleLogger = instance.getConsoleLogger();
+        this.gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .disableHtmlEscaping()
+                .create();
         this.crates = new HashMap<>();
         this.cratesDirectory = new File(instance.getDataFolder() + File.separator + "crates");
-        this.defaultCrateFile = new File(cratesDirectory + File.separator + "example.yml");
+        this.defaultCrateFile = new File(cratesDirectory + File.separator + "example.json");
         CRATE_ID = new NamespacedKey(instance, "crateId");
     }
 
@@ -54,37 +59,41 @@ public class CrateManager {
         // Saving default file
         try {
             // Saving default file (replacing if exists)
-            Files.copy(instance.getResource("example.yml"), defaultCrateFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(instance.getResource("example.json"), defaultCrateFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             consoleLogger.error("An error occurred while trying to save a default file.");
             e.printStackTrace();
             return;
         }
         // Loading crates
-        int loaded = 0;
-        for (File file : cratesDirectory.listFiles()) {
-            final YamlConfiguration fc = YamlConfiguration.loadConfiguration(file);
-            if (file.getName().endsWith(".yml") && !file.getName().equals("example.yml")) {
-                final String crateId = file.getName().replace(".yml", "");
-                final String crateName = fc.getString("name");
-                final ItemStack crateKey = Parser.keyItem(fc, "crate-key", crateId);
-                final ItemBuilder crateItem = new ItemBuilder(Material.CHEST).setName(crateName);
-                crateItem.getPersistentDataContainer().set(CRATE_ID, PersistentDataType.STRING, crateId);
-                crates.put(crateId, new Crate(crateName, crateKey, crateItem.build()));
-                // Getting values
-                for (String key : fc.getConfigurationSection("rewards").getKeys(false)) {
-                    final String path = "rewards." + key;
-                    final int weight = fc.getInt(path + ".weight");
-                    final ItemStack item = (fc.isConfigurationSection(path + ".item")) ? Parser.rewardItem(fc, path + ".item") : null;
-                    final List<String> consoleCommands = (fc.isList(path + ".commands")) ? fc.getStringList(path + ".commands") : null;
-                    crates.get(crateId).addReward(new Reward(weight, item, consoleCommands));
+        for (final File file : cratesDirectory.listFiles()) {
+            // Skipping null files (?) and example.json
+            if (file == null || file.getName().equals("example.json")) continue;
+            int loadedRewards = 0;
+            try {
+                final BufferedReader bufferedReader = Files.newBufferedReader(file.toPath());
+                final JsonCrate jsonCrate = gson.fromJson(bufferedReader, JsonCrate.class);
+                if (jsonCrate != null) {
+                    final String id = file.getName().replace(".json", "");
+                    final ItemStack keyItem = jsonCrate.getCrateKeyItem().toItemStack();
+                    if (keyItem != null) {
+                        final Crate crate = new Crate(id, jsonCrate.getName(), jsonCrate.getPreviewName(), keyItem);
+                        for (final JsonReward jsonReward : jsonCrate.getJsonRewards()) {
+                            crate.addReward(jsonReward.toReward());
+                            loadedRewards++;
+                        }
+                        crate.generateRewardsPool();
+                        crates.put(id, crate);
+                        consoleLogger.success("Loaded crate " + id + " with " + loadedRewards + " rewards.");
+                        continue;
+                    }
+                    consoleLogger.error("An error occurred while trying to load '" + id + "' crate file. Key item is null.");
                 }
-                // Generating rewards pool
-                crates.get(crateId).generateRewardsPool();
-                loaded++;
+            } catch (IOException e) {
+                consoleLogger.error("An error occurred while trying to load '" + file.getName() + "' crate file.");
+                e.printStackTrace();
             }
         }
         crateIds = crates.keySet().stream().sorted().toList();
-        consoleLogger.success("Loaded " + loaded + " crates.");
     }
 }

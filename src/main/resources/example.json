@@ -1,0 +1,31 @@
+{
+  "name": "§eDefault Crate",
+  "previewName": "testInv",
+  "crateKey": {
+    "material": "TRIPWIRE_HOOK",
+    "meta": {
+      "name": "§eDefault Crate Key",
+      "lore": [ "§7Use this key to open §eDefault Crate" ],
+      "enchantments": { "infinity": 1 },
+      "itemFlags": [ "HIDE_ENCHANTS" ],
+      "customModelData": 1
+    }
+  },
+  "rewards": [
+    {
+      "weight": 5,
+      "previewSlot": 5,
+      "previewItem": {
+        "material": "STONE_SHOVEL",
+        "amount": 1,
+        "meta": {
+          "lore": [ "§7Wait! You can hide enchants?" ],
+          "enchantments": { "efficiency": 1 },
+          "itemFlags": [ "HIDE_ENCHANTS" ]
+        }
+      },
+      "givePreviewItemAsReward": true,
+      "commands": [ "minecraft:tell {player} Wow, congrats!" ]
+    }
+  ]
+}

@@ -14,15 +14,18 @@ import org.bukkit.block.Chest;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
@@ -177,6 +180,29 @@ public class CrateListener implements Listener {
             if (item != null && item.getItemMeta().getPersistentDataContainer().has(CrateManager.CRATE_ID, PersistentDataType.STRING)) {
                 event.getInventory().setResult(new ItemStack(Material.AIR));
             }
+        }
+    }
+
+    @EventHandler
+    public void onCratePreview(PlayerInteractEvent event) {
+        if (event.useInteractedBlock() == Event.Result.DENY || event.useItemInHand() == Event.Result.DENY || !event.hasBlock()) return;
+        if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.CHEST) return;
+        event.setCancelled(true);
+
+        final Chest chest = (Chest) event.getClickedBlock().getState();
+        final PersistentDataContainer container = chest.getPersistentDataContainer();
+        if (container.has(CrateManager.CRATE_ID, PersistentDataType.STRING)) {
+            final Crate crate = manager.getCrate(container.get(CrateManager.CRATE_ID, PersistentDataType.STRING));
+            event.getPlayer().openInventory(crate.getPreviewInventory());
+        }
+    }
+
+    // TO-DO: Proper handling of preview windows using Indigo's (upcoming) inventories framework.
+    @EventHandler
+    public void onPreviewClick(InventoryClickEvent event) {
+        if (event.getInventory().getMaxStackSize() == -1) {
+            event.setCancelled(true);
         }
     }
 }
