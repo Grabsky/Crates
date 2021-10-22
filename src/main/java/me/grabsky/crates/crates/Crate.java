@@ -1,10 +1,10 @@
 package me.grabsky.crates.crates;
 
+import me.grabsky.crates.CratesKeys;
 import me.grabsky.indigo.builders.ItemBuilder;
+import me.grabsky.indigo.framework.inventories.GlobalInventory;
 import me.grabsky.indigo.utils.Components;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -18,9 +18,9 @@ public class Crate {
     private final ItemStack crateItem;
     private final List<Reward> rewards;
     private final List<Integer> rewardPool;
-    private final Inventory previewInventory;
+    private final GlobalInventory previewInventory;
 
-    public static final ItemStack NAVIGATION_RETURN = new ItemBuilder(Material.BARRIER)
+    private static final ItemStack NAVIGATION_RETURN = new ItemBuilder(Material.BARRIER)
             .setName("§cPowrót")
             .setCustomModelData(1)
             .build();
@@ -29,19 +29,18 @@ public class Crate {
         this.name = name;
         // Preparing crate key
         this.crateKey = crateKey;
-        crateKey.editMeta((meta) -> meta.getPersistentDataContainer().set(CrateManager.CRATE_ID, PersistentDataType.STRING, id));
+        crateKey.editMeta((meta) -> meta.getPersistentDataContainer().set(CratesKeys.CRATE_ID, PersistentDataType.STRING, id));
         // Preparing crate item
         this.crateItem = new ItemStack(Material.CHEST);
         crateItem.editMeta((meta) -> {
             meta.displayName(Components.parseAmpersand(name));
-            meta.getPersistentDataContainer().set(CrateManager.CRATE_ID, PersistentDataType.STRING, id);
+            meta.getPersistentDataContainer().set(CratesKeys.CRATE_ID, PersistentDataType.STRING, id);
         });
         this.rewards = new ArrayList<>();
         this.rewardPool = new ArrayList<>();
         // Preparing crate preview inventory
-        this.previewInventory = Bukkit.createInventory(null, 54, Components.parseAmpersand(previewName));
-        previewInventory.setMaxStackSize(-1);
-        previewInventory.setItem(49, NAVIGATION_RETURN);
+        this.previewInventory = new GlobalInventory(Components.parseSection(previewName), 54, "block.note_block.hat", 1, 1.5f);
+        previewInventory.setItem(49, NAVIGATION_RETURN, (info) -> info.getPlayer().closeInventory());
     }
 
     // Returns (display) name of the crate
@@ -79,7 +78,7 @@ public class Crate {
         return rewards.get(rewardPool.get(new Random().nextInt(rewardPool.size())));
     }
 
-    public Inventory getPreviewInventory() {
-        return this.previewInventory;
+    public GlobalInventory getPreviewInventory() {
+        return previewInventory;
     }
 }

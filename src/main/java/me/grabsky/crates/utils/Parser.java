@@ -1,7 +1,7 @@
 package me.grabsky.crates.utils;
 
+import me.grabsky.crates.CratesKeys;
 import me.grabsky.indigo.builders.ItemBuilder;
-import me.grabsky.crates.crates.CrateManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -73,7 +73,7 @@ public class Parser {
         }
         builder.addEnchantment(Enchantment.ARROW_INFINITE, 1);
         builder.setItemFlags(ItemFlag.HIDE_ENCHANTS);
-        builder.getPersistentDataContainer().set(CrateManager.CRATE_ID, PersistentDataType.STRING, crateId);
+        builder.getPersistentDataContainer().set(CratesKeys.CRATE_ID, PersistentDataType.STRING, crateId);
         return builder.build();
     }
 }

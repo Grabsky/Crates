@@ -3,8 +3,8 @@ package me.grabsky.crates;
 import me.grabsky.crates.commands.CratesCommand;
 import me.grabsky.crates.configuration.CratesConfig;
 import me.grabsky.crates.configuration.CratesLang;
-import me.grabsky.crates.crates.CrateManager;
-import me.grabsky.crates.listeners.CrateListener;
+import me.grabsky.crates.crates.CratesManager;
+import me.grabsky.crates.listeners.CratesListener;
 import me.grabsky.indigo.framework.commands.CommandManager;
 import me.grabsky.indigo.logger.ConsoleLogger;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,16 +15,17 @@ public class Crates extends JavaPlugin {
     private ConsoleLogger consoleLogger;
     private CratesConfig config;
     private CratesLang lang;
-    private CrateListener crateListener;
-    private CrateManager crateManager;
+    private CratesListener crateListener;
+    private CratesManager crateManager;
     // Getters
     public static Crates getInstance() {
         return instance;
     }
     public ConsoleLogger getConsoleLogger() { return consoleLogger; }
-    public CrateManager getCratesManager() {
+    public CratesManager getCratesManager() {
         return crateManager;
     }
+
 
 
     @Override
@@ -34,11 +35,14 @@ public class Crates extends JavaPlugin {
         // Creating instances
         this.config = new CratesConfig(this);
         this.lang = new CratesLang(this);
-        this.crateManager = new CrateManager(this);
+        // Initializing NamespacedKeys
+        new CratesKeys(this);
+        // Initializing CratesManager
+        this.crateManager = new CratesManager(this);
         // Reloading configuration files and rewards
         this.reload();
         // Registering event
-        this.crateListener = new CrateListener(this);
+        this.crateListener = new CratesListener(this);
         this.getServer().getPluginManager().registerEvents(crateListener, this);
         // Registering command(s)
         final CommandManager commands = new CommandManager(this);

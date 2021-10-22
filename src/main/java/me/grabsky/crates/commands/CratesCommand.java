@@ -3,7 +3,7 @@ package me.grabsky.crates.commands;
 import me.grabsky.crates.Crates;
 import me.grabsky.crates.configuration.CratesLang;
 import me.grabsky.crates.crates.Crate;
-import me.grabsky.crates.crates.CrateManager;
+import me.grabsky.crates.crates.CratesManager;
 import me.grabsky.indigo.configuration.Global;
 import me.grabsky.indigo.framework.commands.BaseCommand;
 import me.grabsky.indigo.framework.commands.Context;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class CratesCommand extends BaseCommand {
     private final Crates instance;
-    private final CrateManager manager;
+    private final CratesManager manager;
 
     public CratesCommand(Crates instance) {
         super("crates", Arrays.asList("crate", "skrzynki"), "crates.command.crates", ExecutorType.ALL);

@@ -6,7 +6,6 @@ import me.grabsky.crates.Crates;
 import me.grabsky.crates.crates.json.JsonCrate;
 import me.grabsky.crates.crates.json.JsonReward;
 import me.grabsky.indigo.logger.ConsoleLogger;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedReader;
@@ -18,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CrateManager {
+public class CratesManager {
     private final Crates instance;
     private final ConsoleLogger consoleLogger;
     private final Gson gson;
@@ -28,9 +27,7 @@ public class CrateManager {
 
     private List<String> crateIds;
 
-    public static NamespacedKey CRATE_ID;
-
-    public CrateManager(Crates instance) {
+    public CratesManager(Crates instance) {
         this.instance = instance;
         this.consoleLogger = instance.getConsoleLogger();
         this.gson = new GsonBuilder()
@@ -40,7 +37,6 @@ public class CrateManager {
         this.crates = new HashMap<>();
         this.cratesDirectory = new File(instance.getDataFolder() + File.separator + "crates");
         this.defaultCrateFile = new File(cratesDirectory + File.separator + "example.json");
-        CRATE_ID = new NamespacedKey(instance, "crateId");
     }
 
     public Crate getCrate(String id) {
@@ -68,7 +64,7 @@ public class CrateManager {
         // Loading crates
         for (final File file : cratesDirectory.listFiles()) {
             // Skipping null files (?) and example.json
-            if (file == null || file.getName().equals("example.json")) continue;
+            if (file == null || !file.getName().endsWith(".json") || file.getName().equals("example.json")) continue;
             int loadedRewards = 0;
             try {
                 final BufferedReader bufferedReader = Files.newBufferedReader(file.toPath());
