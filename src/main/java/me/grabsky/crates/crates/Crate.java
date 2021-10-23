@@ -62,7 +62,7 @@ public class Crate {
     }
 
     // Adds reward to list
-    public void addReward(Reward reward) {
+    public void addReward(@NotNull final Reward reward) {
         rewards.add(reward);
         // Adding reward to reward pool
         final int index = rewards.size() - 1;
@@ -70,7 +70,7 @@ public class Crate {
             rewardPool.add(index);
         }
         // Adding reward to preview inventory
-        final ItemStack previewItem = reward.getPreviewItem();
+        final ItemStack previewItem = reward.getPreviewItem().clone();
         if (reward.getPreviewItemRarity() != null && !reward.getPreviewItemRarity().equals("")) {
             previewItem.editMeta((meta) -> {
                 final List<Component> lore = (meta.hasLore()) ? meta.lore() : new ArrayList<>();
