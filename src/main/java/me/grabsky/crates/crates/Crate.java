@@ -9,6 +9,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Crate {
             .setCustomModelData(1)
             .build();
 
-    public Crate(String id, String name, String previewName, ItemStack crateKey) {
+    public Crate(@NotNull final String id, @NotNull final String name, @NotNull final String previewInventoryTitle, @NotNull final ItemStack crateKey) {
         this.name = name;
         // Preparing crate key
         this.crateKey = crateKey;
@@ -41,7 +42,7 @@ public class Crate {
         this.rewards = new ArrayList<>();
         this.rewardPool = new ArrayList<>();
         // Preparing crate preview inventory
-        this.previewInventory = new GlobalInventory(Components.parseSection(previewName), 54, "block.note_block.hat", 1, 1.5f);
+        this.previewInventory = new GlobalInventory(Components.parseSection(previewInventoryTitle), 54, "block.note_block.hat", 1, 1.5f);
         previewInventory.setItem(49, NAVIGATION_RETURN, (event) -> event.getWhoClicked().closeInventory());
     }
 
@@ -55,6 +56,7 @@ public class Crate {
         return crateKey;
     }
 
+    // Returns placeable crate (chest)
     public ItemStack getCrateItem() {
         return crateItem;
     }
@@ -62,7 +64,12 @@ public class Crate {
     // Adds reward to list
     public void addReward(Reward reward) {
         rewards.add(reward);
-        // Add reward to preview
+        // Adding reward to reward pool
+        final int index = rewards.size() - 1;
+        for (int i = 0; i < reward.getWeight(); i++) {
+            rewardPool.add(index);
+        }
+        // Adding reward to preview inventory
         final ItemStack previewItem = reward.getPreviewItem();
         if (reward.getPreviewItemRarity() != null && !reward.getPreviewItemRarity().equals("")) {
             previewItem.editMeta((meta) -> {
@@ -74,20 +81,12 @@ public class Crate {
         previewInventory.setItem(reward.getPreviewItemSlot(), previewItem);
     }
 
-    // Generates reward path
-    public void generateRewardsPool() {
-        for (int i = 0; i < rewards.size(); i++) {
-            for (int z = 0; z < rewards.get(i).getWeight(); z++) {
-                rewardPool.add(i);
-            }
-        }
-    }
-
     // Returns random Reward drawn from rewards path
     public Reward getRandomReward() {
         return rewards.get(rewardPool.get(new Random().nextInt(rewardPool.size())));
     }
 
+    // Returns preview inventory
     public GlobalInventory getPreviewInventory() {
         return previewInventory;
     }
