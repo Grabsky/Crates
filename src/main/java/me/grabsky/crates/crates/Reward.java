@@ -4,16 +4,18 @@ import org.bukkit.inventory.ItemStack;
 
 public class Reward {
     private final int weight;
+    private final String previewItemRarity;
     private final ItemStack previewItem;
-    private final int previewSlot;
-    private final boolean givePreviewItemAsReward;
+    private final int previewItemSlot;
+    private final boolean usePreviewItemAsReward;
     private final String[] consoleCommands;
 
-    public Reward(int weight, int previewSlot, ItemStack previewItem, boolean givePreviewItemAsReward, String[] consoleCommands) {
+    public Reward(int weight, String previewItemRarity, int previewItemSlot, ItemStack previewItem, boolean usePreviewItemAsReward, String[] consoleCommands) {
         this.weight = weight;
-        this.previewSlot = previewSlot;
+        this.previewItemRarity = previewItemRarity;
+        this.previewItemSlot = previewItemSlot;
         this.previewItem = previewItem;
-        this.givePreviewItemAsReward = givePreviewItemAsReward;
+        this.usePreviewItemAsReward = usePreviewItemAsReward;
         this.consoleCommands = consoleCommands;
     }
 
@@ -21,27 +23,31 @@ public class Reward {
         return weight;
     }
 
+    public String getPreviewItemRarity() {
+        return previewItemRarity;
+    }
+
     public ItemStack getPreviewItem() {
         return previewItem;
     }
 
-    public int getPreviewSlot() {
-        return previewSlot;
-    }
-
-    public ItemStack getItem() {
-        return (givePreviewItemAsReward) ? previewItem : null;
-    }
-
-    public String[] getConsoleCommands() {
-        return consoleCommands;
+    public int getPreviewItemSlot() {
+        return previewItemSlot;
     }
 
     public boolean hasItem() {
-        return givePreviewItemAsReward;
+        return usePreviewItemAsReward;
+    }
+
+    public ItemStack getItem() {
+        return (usePreviewItemAsReward) ? previewItem : null;
     }
 
     public boolean hasConsoleCommands() {
         return (consoleCommands != null && consoleCommands.length > 0);
+    }
+
+    public String[] getConsoleCommands() {
+        return consoleCommands;
     }
 }

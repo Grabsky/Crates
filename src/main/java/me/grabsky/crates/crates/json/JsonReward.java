@@ -8,16 +8,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class JsonReward {
     @Expose private int weight;
-    @Expose private int previewSlot;
+    @Expose private String previewItemRarity;
+    @Expose private int previewItemSlot;
     @Expose private JsonItem previewItem;
-    @Expose private boolean givePreviewItemAsReward;
+    @Expose private boolean usePreviewItemAsReward;
     @Expose private String[] commands;
 
     @Nullable
     public Reward toReward() {
         final ItemStack internalPreviewItem = this.previewItem.toItemStack();
         if (internalPreviewItem != null) {
-            return new Reward(weight, previewSlot, internalPreviewItem, givePreviewItemAsReward, commands);
+            return new Reward(weight, previewItemRarity, previewItemSlot, internalPreviewItem, usePreviewItemAsReward, commands);
         }
         return null;
     }

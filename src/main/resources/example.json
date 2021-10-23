@@ -13,7 +13,8 @@
   "rewards": [
     {
       "weight": 5,
-      "previewSlot": 0,
+      "previewItemRarityLore": "§6Legendary",
+      "previewItemSlot": 0,
       "previewItem": {
         "material": "PLAYER_HEAD",
         "amount": 1,
@@ -26,8 +27,8 @@
           "customModelData": 1
         }
       },
-      "givePreviewItemAsReward": true,
-      "commands": [ "minecraft:tell {player} You won uhhh... a burger? I wouldn't eat it." ]
+      "usePreviewItemAsReward": true,
+      "rewardCommands": [ "minecraft:tell {player} You won uhhh... a burger? I wouldn't eat it." ]
     }
   ]
 }

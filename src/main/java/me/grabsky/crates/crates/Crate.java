@@ -4,6 +4,8 @@ import me.grabsky.crates.CratesKeys;
 import me.grabsky.indigo.builders.ItemBuilder;
 import me.grabsky.indigo.framework.inventories.GlobalInventory;
 import me.grabsky.indigo.utils.Components;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -40,7 +42,7 @@ public class Crate {
         this.rewardPool = new ArrayList<>();
         // Preparing crate preview inventory
         this.previewInventory = new GlobalInventory(Components.parseSection(previewName), 54, "block.note_block.hat", 1, 1.5f);
-        previewInventory.setItem(49, NAVIGATION_RETURN, (info) -> info.getPlayer().closeInventory());
+        previewInventory.setItem(49, NAVIGATION_RETURN, (event) -> event.getWhoClicked().closeInventory());
     }
 
     // Returns (display) name of the crate
@@ -61,7 +63,15 @@ public class Crate {
     public void addReward(Reward reward) {
         rewards.add(reward);
         // Add reward to preview
-        previewInventory.setItem(reward.getPreviewSlot(), reward.getPreviewItem());
+        final ItemStack previewItem = reward.getPreviewItem();
+        if (reward.getPreviewItemRarity() != null && !reward.getPreviewItemRarity().equals("")) {
+            previewItem.editMeta((meta) -> {
+                final List<Component> lore = (meta.hasLore()) ? meta.lore() : new ArrayList<>();
+                lore.add(Components.parseSection(reward.getPreviewItemRarity()).decoration(TextDecoration.ITALIC, false)); // Safe to ignore
+                meta.lore(lore);
+            });
+        }
+        previewInventory.setItem(reward.getPreviewItemSlot(), previewItem);
     }
 
     // Generates reward path
