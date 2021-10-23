@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+// TO-DO: This class looks like a mess, perhaps there is a way to clean that up and optimize.
 public class CratesListener implements Listener {
     private final Crates instance;
     private final CratesManager manager;
