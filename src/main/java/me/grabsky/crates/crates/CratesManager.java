@@ -78,7 +78,6 @@ public class CratesManager {
                             crate.addReward(jsonReward.toReward());
                             loadedRewards++;
                         }
-                        crate.generateRewardsPool();
                         crates.put(id, crate);
                         consoleLogger.success("Loaded crate " + id + " with " + loadedRewards + " rewards.");
                         continue;
