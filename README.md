@@ -10,7 +10,7 @@ Server | Version
 [Paper](https://github.com/PaperMC/Paper) (and forks...) | 1.18 | https://papermc.io/downloads
 
 ### External dependencies
-Depdency | Required
+Dependency | Required
 --- | ---
 [Indigo](https://github.com/Grabsky/Indigo) | Yes
 
