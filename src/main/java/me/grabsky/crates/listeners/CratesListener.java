@@ -8,11 +8,12 @@ import me.grabsky.crates.crates.Crate;
 import me.grabsky.crates.crates.CratesManager;
 import me.grabsky.crates.crates.Reward;
 import me.grabsky.indigo.configuration.Global;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.world.level.block.entity.TileEntityChest;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import org.bukkit.*;
 import org.bukkit.block.Chest;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -52,11 +53,11 @@ public class CratesListener implements Listener {
         // A bunch of variables I can't really get rid of
         final org.bukkit.World world = location.getWorld();
         final Location displayLocation = chest.getLocation().clone().add(0.5, 1, 0.5);
-        final net.minecraft.world.level.World nmsWorld = ((CraftWorld) chest.getWorld()).getHandle();
-        final BlockPosition position = new BlockPosition(location.getX(), location.getY(), location.getZ());
-        final TileEntityChest tileChest = (TileEntityChest) nmsWorld.getTileEntity(position);
+        final Level nmsWorld = ((CraftWorld) chest.getWorld()).getHandle();
+        final BlockPos position = new BlockPos(location.getX(), location.getY(), location.getZ());
+        final ChestBlockEntity tileChest = (ChestBlockEntity) nmsWorld.getBlockEntity(position);
         // Opening the chest
-        nmsWorld.playBlockAction(position, tileChest.getBlock().getBlock(), 1, 1);
+        nmsWorld.blockEvent(position, tileChest.getBlockState().getBlock(), 1, 1);
         // Spawning a reward item
         final Item displayItem = chest.getWorld().dropItem(displayLocation, item);
         displayItem.setPickupDelay(Integer.MAX_VALUE);
@@ -68,7 +69,7 @@ public class CratesListener implements Listener {
         world.spawnParticle(CratesConfig.PARTICLES_TYPE, displayLocation, CratesConfig.PARTICLES_AMOUNT, CratesConfig.PARTICLES_OFFSET_X, CratesConfig.PARTICLES_OFFSET_Y, CratesConfig.PARTICLES_OFFSET_Z, CratesConfig.PARTICLES_SPEED);
         // Closing chest and removing item after X ticks (80 by default)
         Bukkit.getScheduler().runTaskLater(instance, () -> {
-            nmsWorld.playBlockAction(position, tileChest.getBlock().getBlock(), 1, 0);
+            nmsWorld.blockEvent(position, tileChest.getBlockState().getBlock(), 1, 0);
             // Removing display item from list and then from the world
             displayItems.remove(displayItem);
             displayItem.remove();

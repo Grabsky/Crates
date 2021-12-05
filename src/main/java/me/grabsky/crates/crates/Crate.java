@@ -4,6 +4,8 @@ import me.grabsky.crates.CratesKeys;
 import me.grabsky.indigo.builders.ItemBuilder;
 import me.grabsky.indigo.framework.inventories.GlobalInventory;
 import me.grabsky.indigo.utils.Components;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
@@ -42,7 +44,7 @@ public class Crate {
         this.rewards = new ArrayList<>();
         this.rewardPool = new ArrayList<>();
         // Preparing crate preview inventory
-        this.previewInventory = new GlobalInventory(Components.parseSection(previewInventoryTitle), 54, "block.note_block.hat", 1, 1.5f);
+        this.previewInventory = new GlobalInventory(Components.parseSection(previewInventoryTitle), 54, Sound.sound(Key.key("block.note_block.hat"), Sound.Source.MASTER, 1f, 1.5f));
         previewInventory.setItem(49, NAVIGATION_RETURN, (event) -> event.getWhoClicked().closeInventory());
     }
 
