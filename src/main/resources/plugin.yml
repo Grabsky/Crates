@@ -1,5 +1,5 @@
 name: Crates
-version: ${project.version}
+version: 1.0-SNAPSHOT
 main: me.grabsky.crates.Crates
 api-version: 1.18
 authors: [Grabsky]
