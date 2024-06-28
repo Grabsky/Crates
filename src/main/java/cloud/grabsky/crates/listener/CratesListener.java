@@ -159,7 +159,7 @@ public class CratesListener implements Listener {
                 final String message = "[" + LocalDateTime.now().format(DATE_FORMATTER) + "] " + player.getName() + " (" + player.getUniqueId() + ") opened crate " + crate.getName() + " at " + location.blockX() + ", " + location.blockY() + ", " + location.blockZ() + " in " + location.getWorld().key().asString();
                 // Logging to the file with console fallback in case something goes wrong.
                 try {
-                    Files.write(path, Collections.singletonList(message), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+                    Files.write(path, Collections.singletonList(message), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 } catch (final IOException e) {
                     plugin.getLogger().warning("Could not log message to '" + path.getFileName() + "' file due to following error(s):");
                     plugin.getLogger().severe(" (1) " + e.getClass().getSimpleName() + ": " + e.getMessage());
