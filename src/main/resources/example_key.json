@@ -1,0 +1,18 @@
+{
+  // This value is used for identification. Changing this value can make all existing keys invalid.
+  "name": "example_key",
+  // Friendly name of the key.
+  "display_name": "Example Crate",
+  // Item representation of this key.
+  "item": {
+    "material": "minecraft:tripwire_hook",
+    "meta": {
+      "name": "<yellow>Example Crate Key",
+      "lore": ["<gray>Use this key to open <yellow>Example Crate"],
+      "enchantments": [
+        { "key": "minecraft:infinity", "level": 1 }
+      ],
+      "item_flags": ["HIDE_ENCHANTS"]
+    }
+  }
+}

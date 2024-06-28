@@ -1,0 +1,23 @@
+{
+    // How much time crate would be open for. In ticks.
+    "animation_time": 80,
+    // ...
+    "open_effects": {
+        // Sound to be played.
+        "sound": { "key": "entity.item.pickup", "source": "master", "volume": 1.0, "pitch": 1.0 },
+        // Particles to be spawned.
+        "particles": {
+            "particle": "WAX_OFF",
+            "amount": 40,
+            "speed": 0.3,
+            "offset_x": 0.25,
+            "offset_y": 0.4,
+            "offset_z": 0.25
+        }
+    },
+    // Failure effects. When player fails to open a crate.
+    "failure_effects": {
+        // Sound to be played.
+        "sound": { "key": "entity.item.break", "source": "master", "volume": 1.0, "pitch": 1.0 }
+    }
+}

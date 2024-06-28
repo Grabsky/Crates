@@ -1,0 +1,60 @@
+plugins {
+    id "java-library"
+    id "net.minecrell.plugin-yml.paper" version "0.6.0"
+    id("io.papermc.paperweight.userdev") version "1.7.1"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
+group = "cloud.grabsky"
+version = "1.21-${System.getenv("GITHUB_RUN_NUMBER") ?: "DEV"}"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    // Repository for the Paper API.
+    maven { url = "https://repo.papermc.io/repository/maven-public/" }
+    // Repository containing the 'bedrock' dependency.
+    maven { url = "https://maven.pkg.github.com/grabsky/bedrock"; fillCredentials(it) }
+    // Repository containing the 'configuration' dependency.
+    maven { url = "https://maven.pkg.github.com/grabsky/configuration"; fillCredentials(it) }
+    // Repository containing the 'commands' dependency.
+    maven { url = "https://maven.pkg.github.com/grabsky/commands"; fillCredentials(it) }
+}
+
+dependencies {
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
+    // Paper API
+    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
+    // Plugin libraries, must be shaded.
+    implementation("cloud.grabsky:bedrock:1.20.1-47")
+    implementation("cloud.grabsky:commands:1.20.1-34")
+    implementation("cloud.grabsky:configuration-paper:1.20.1-43")
+}
+
+tasks {
+    shadowJar { archiveFileName = "${rootProject.name}-${project.version}.jar" }
+    compileJava {
+        options.fork = true
+        // Setting compatibility to Java 17 (above should work too).
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+}
+
+paper {
+    main = "cloud.grabsky.crates.Crates"
+    apiVersion = "1.20"
+    // ...
+    hasOpenClassloader = true
+}
+
+/* UTILITY METHODS */
+
+private final def fillCredentials(final MavenArtifactRepository repository) {
+    repository.credentials {
+        username = findProperty("gpr.actor") ?: System.getenv("GITHUB_ACTOR")
+        password = findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+    }
+}

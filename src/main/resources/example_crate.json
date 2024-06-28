@@ -1,0 +1,35 @@
+{
+  // This value is used for identification. Changing this value will make all existing crates and keys invalid.
+  "name": "example_crate",
+  // Friendly name of the crate.
+  "display_name": "Example Crate",
+  // You need this item to open the crate.
+  "allowed_keys": ["example_key"],
+  // Rewards that can be obtained from this crate.
+  "rewards": [
+    {
+      // Reward weight. Used for calculating chance.
+      "weight": 5,
+      // Items that are given to the player upon winning this reward.
+      "items": [
+        {
+          "material": "minecraft:player_head",
+          "meta": {
+            "name": "<aqua>Burger",
+            "lore": ["What are you looking at?", "It's just a burger!"],
+            "enchantments": [
+              { "key": "minecraft:efficiency", "level": 1 }
+            ],
+            "item_flags": ["HIDE_ENCHANTS"],
+            "skull_texture": "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWZkMDE0MTEzYzQ1Yjk3OTE5MTdjMjRkYzBjMGEzMDRlODBmMWE1Njc0MTMwYmI1MTcyNGRjMTMwMzBlNDBiNSJ9fX0=",
+            "custom_model_data": 1
+          }
+        }
+      ],
+      // Console commands that are executed upon winning this reward.
+      "commands": [
+        "minecraft:tell <player> You won uhhh... a burger? I wouldn't eat it."
+      ]
+    }
+  ]
+}
