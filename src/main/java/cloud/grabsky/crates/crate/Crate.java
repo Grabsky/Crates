@@ -57,9 +57,11 @@ public final class Crate {
             meta.getPersistentDataContainer().set(Crates.CRATE_NAME, PersistentDataType.STRING, name);
         });
         // Indexing rewards.
-        for (int rewardIndex = 0; rewardIndex < rewards.size(); rewardIndex++)
-            for (int i = 0; i < rewards.get(rewardIndex).getWeight(); i++)
+        for (int rewardIndex = 0; rewardIndex < rewards.size(); rewardIndex++) {
+            final Reward reward = rewards.get(rewardIndex).fillIndex(rewardIndex);
+            for (int i = 0; i < reward.getWeight(); i++)
                 rewardPool.add(rewardIndex);
+        }
         // Marking crate as initialized.
         this.isInitialized = true;
     }

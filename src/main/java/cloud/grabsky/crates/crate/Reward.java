@@ -5,7 +5,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,5 +32,20 @@ public final class Reward {
     @Json(name = "commands")
     @Getter(AccessLevel.PUBLIC)
     private final @Nullable List<String> consoleCommands;
+
+    @Json(ignore = true)
+    @Getter(AccessLevel.PUBLIC)
+    private @UnknownNullability Integer index;
+
+    @Internal // Reward is constructed directly by Moshi and we need to set this manually.
+    public @NotNull Reward fillIndex(final int index) {
+        // Throwing exception if index is already set.
+        if (this.index != null)
+            throw new IllegalStateException("Reward index can be filled only once.");
+        // Setting the index.
+        this.index = index;
+        // Returning this instance of Reward object to keep 'builder-like' flow.
+        return this;
+    }
 
 }

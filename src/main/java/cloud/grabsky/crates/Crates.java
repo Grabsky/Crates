@@ -9,6 +9,7 @@ import cloud.grabsky.configuration.paper.PaperConfigurationMapper;
 import cloud.grabsky.crates.command.CratesCommand;
 import cloud.grabsky.crates.command.argument.CrateArgument;
 import cloud.grabsky.crates.command.argument.KeyArgument;
+import cloud.grabsky.crates.command.template.CommandExceptionTemplate;
 import cloud.grabsky.crates.configuration.PluginConfig;
 import cloud.grabsky.crates.configuration.PluginLocale;
 import cloud.grabsky.crates.crate.Crate;
@@ -56,6 +57,8 @@ public final class Crates extends BedrockPlugin {
         final CrateArgument crateArgument = new CrateArgument(this);
         // Creating new RootCommandManager instance= and registering commands.
         this.commandManager = new RootCommandManager(this)
+                // Applying template(s)...
+                .apply(CommandExceptionTemplate.INSTANCE)
                 // Registering dependency(-ies)...
                 .registerDependency(Crates.class, this)
                 // Registering argument parser(s)...
