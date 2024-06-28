@@ -115,12 +115,15 @@ public class CratesListener implements Listener {
         // Ignoring non-crate chests.
         if (chest.getPersistentDataContainer().has(Crates.CRATE_NAME, PersistentDataType.STRING) == false)
             return;
-        // Cancelling the event because at this point we know player has clicked on a crate.
-        event.setCancelled(true);
         // Getting the player involved in this event.
         final Player player = event.getPlayer();
         // Getting the item player is holding in their hand.
         final ItemStack item = event.getItem();
+        // Skipping if player wants to place a block.
+        if (player.isSneaking() == true && item != null && item.getType().isBlock() == true)
+            return;
+        // Cancelling the event because at this point we know player has clicked on a crate.
+        event.setCancelled(true);
         // Reading crate id from the block. Can be null.
         final @Nullable String crateId = chest.getPersistentDataContainer().get(Crates.CRATE_NAME, PersistentDataType.STRING);
         // Getting the Crate instance from the id. Can be null.
