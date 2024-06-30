@@ -31,6 +31,10 @@ public final class Crate {
     @Getter(AccessLevel.PUBLIC)
     private final @NotNull List<String> allowedKeys;
 
+    @Json(name = "block_type")
+    @Getter(AccessLevel.PUBLIC)
+    private final @NotNull Material crateBlockType;
+
     @Getter(AccessLevel.PUBLIC)
     private final @NotNull List<Reward> rewards;
 
@@ -49,8 +53,8 @@ public final class Crate {
     public void initialize() {
         if (this.isInitialized == true)
             throw new IllegalStateException("CRATE_ALREADY_INITIALIZED");
-        // ...
-        this.crateItem = ItemStack.of(Material.CHEST);
+        // To be replaced in the future once ItemType and BlockType are part of the API.
+        this.crateItem = ItemStack.of(crateBlockType);
         // Applying PDC data to the crate item.
         crateItem.editMeta(meta -> {
             meta.getPersistentDataContainer().set(Crates.CRATE_NAME, PersistentDataType.STRING, name);

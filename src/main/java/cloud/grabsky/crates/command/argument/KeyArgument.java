@@ -10,7 +10,6 @@ import cloud.grabsky.commands.exception.CommandLogicException;
 import cloud.grabsky.commands.exception.MissingInputException;
 import cloud.grabsky.crates.Crates;
 import cloud.grabsky.crates.configuration.PluginLocale;
-import cloud.grabsky.crates.crate.Crate;
 import cloud.grabsky.crates.crate.Key;
 
 import java.util.List;

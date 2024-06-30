@@ -25,14 +25,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import lombok.AccessLevel;
-import lombok.Getter;
 
 public class CratesManager {
     private final Crates plugin;

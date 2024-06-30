@@ -5,6 +5,8 @@
   "display_name": "Example Crate",
   // You need this item to open the crate.
   "allowed_keys": ["example_key"],
+  // Crate block type. It MUST be a tile entity.
+  "block_type": "minecraft:ender_chest",
   // Rewards that can be obtained from this crate.
   "rewards": [
     {
