@@ -51,12 +51,12 @@ public final class Crate {
             throw new IllegalStateException("CRATE_ALREADY_INITIALIZED");
         // ...
         this.crateItem = ItemStack.of(Material.CHEST);
-        this.rewardPool = new ArrayList<>();
         // Applying PDC data to the crate item.
         crateItem.editMeta(meta -> {
             meta.getPersistentDataContainer().set(Crates.CRATE_NAME, PersistentDataType.STRING, name);
         });
         // Indexing rewards.
+        this.rewardPool = new ArrayList<>();
         for (int rewardIndex = 0; rewardIndex < rewards.size(); rewardIndex++) {
             final Reward reward = rewards.get(rewardIndex).fillIndex(rewardIndex);
             for (int i = 0; i < reward.getWeight(); i++)

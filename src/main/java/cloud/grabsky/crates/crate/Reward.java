@@ -41,7 +41,7 @@ public final class Reward {
     public @NotNull Reward fillIndex(final int index) {
         // Throwing exception if index is already set.
         if (this.index != null)
-            throw new IllegalStateException("Reward index can be filled only once.");
+            throw new IllegalStateException("REWARD_INDEX_ALREADY_FILLED");
         // Setting the index.
         this.index = index;
         // Returning this instance of Reward object to keep 'builder-like' flow.

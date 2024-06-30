@@ -29,12 +29,12 @@ public final class Key {
 
     public void initialize() {
         if (this.isInitialized == true)
-            throw new IllegalStateException("CRATE_ALREADY_INITIALIZED");
-        // ...
+            throw new IllegalStateException("KEY_ALREADY_INITIALIZED");
+        // Applying PDC data to the key item.
         item.editMeta(meta -> {
             meta.getPersistentDataContainer().set(Crates.KEY_NAME, PersistentDataType.STRING, name);
         });
-        // ...
+        // Marking key as initialized.
         isInitialized = true;
     }
 }

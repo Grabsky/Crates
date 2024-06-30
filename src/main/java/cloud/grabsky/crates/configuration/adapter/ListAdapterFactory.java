@@ -16,6 +16,9 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * This {@link List List<T>} adapter is delegate parser which additionally allows parsing of single object to a list.
+ */
 public enum ListAdapterFactory implements JsonAdapter.Factory {
     INSTANCE; // SINGLETON
 
