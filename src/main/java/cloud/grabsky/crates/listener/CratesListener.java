@@ -71,7 +71,7 @@ public class CratesListener implements Listener {
             });
             // Playing configured sound.
             if (PluginConfig.OPEN_EFFECTS_SOUND != null)
-                location.getWorld().playSound(PluginConfig.OPEN_EFFECTS_SOUND);
+                location.getWorld().playSound(PluginConfig.OPEN_EFFECTS_SOUND, location.x(), location.y(), location.z());
             // Spawning configured particles.
             if (PluginConfig.OPEN_EFFECTS_PARTICLES != null)
                 location.getWorld().spawnParticle(
