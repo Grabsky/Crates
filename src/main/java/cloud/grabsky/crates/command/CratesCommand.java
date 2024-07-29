@@ -143,7 +143,7 @@ public final class CratesCommand extends RootCommand {
             else target.getLocation().getWorld().dropItem(target.getLocation(), item);
             // Sending message to the sender.
             if (sender != target)
-                Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_SENDER_SINGLE).placeholder("amount", amount).placeholder("key", keyDisplayName).send(target);
+                Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_SENDER_SINGLE).placeholder("amount", amount).placeholder("key", keyDisplayName).placeholder("target", target).send(sender);
             // Sending message to the target.
             Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_TARGET).placeholder("amount", amount).placeholder("key", keyDisplayName).send(target);
             return;
