@@ -7,9 +7,24 @@
   "allowed_keys": ["example_key"],
   // Crate block type. It MUST be a tile entity.
   "block_type": "minecraft:ender_chest",
+  // Preview inventory title. Supports MiniMessage.
+  "preview_inventory_title": "Example Crate",
+  // Preview inventory rows count. Must be a number between 1 and 6 or 'null'. Can be omitted.
+  "preview_inventory_rows": 6,
+  // Preview inventory return button slot. Must be a number between 0 and 53 or 'null'. Can be omitted.
+  "preview_inventory_return_button_slot": 49,
+  // Preview inventory return button. Can be omitted or set to 'null' to disable.
+  "preview_inventory_return_button": {
+    "material": "minecraft:barrier",
+    "meta": {
+      "name": "<red>Return"
+    }
+  },
   // Rewards that can be obtained from this crate.
   "rewards": [
     {
+      // Preview inventory slot. Must be a number between 0 and 53 or 'null'. Can be omitted.
+      "preview_inventory_slot": 0,
       // Reward weight. Used for calculating chance.
       "weight": 5,
       // Items that are given to the player upon winning this reward.

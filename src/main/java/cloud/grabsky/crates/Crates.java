@@ -1,6 +1,7 @@
 package cloud.grabsky.crates;
 
 import cloud.grabsky.bedrock.BedrockPlugin;
+import cloud.grabsky.bedrock.inventory.BedrockPanel;
 import cloud.grabsky.commands.RootCommandManager;
 import cloud.grabsky.configuration.ConfigurationHolder;
 import cloud.grabsky.configuration.ConfigurationMapper;
@@ -68,6 +69,8 @@ public final class Crates extends BedrockPlugin {
                 .setCompletionsProvider(Crate.class, crateArgument)
                 // Registering command(s)...
                 .registerCommand(CratesCommand.class);
+        // Register listeners required for crate preview inventories to work properly.
+        BedrockPanel.registerDefaultListeners(this);
     }
 
     @Override

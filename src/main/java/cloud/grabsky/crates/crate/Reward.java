@@ -17,6 +17,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Reward {
 
+    @Json(name = "preview_inventory_slot")
+    @Getter(AccessLevel.PUBLIC)
+    private final @Nullable Integer previewInventorySlot;
+
     @Getter(AccessLevel.PUBLIC)
     private final int weight;
 

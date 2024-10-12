@@ -35,6 +35,22 @@ public final class Crate {
     @Getter(AccessLevel.PUBLIC)
     private final @NotNull Material crateBlockType;
 
+    @Json(name = "preview_inventory_title")
+    @Getter(AccessLevel.PUBLIC)
+    private final @NotNull String previewInventoryTitle;
+
+    @Json(name = "preview_inventory_rows")
+    @Getter(AccessLevel.PUBLIC)
+    private final @Nullable Integer previewInventoryRows;
+
+    @Json(name = "preview_inventory_return_button_slot")
+    @Getter(AccessLevel.PUBLIC)
+    private final @Nullable Integer previewInventoryReturnButtonSlot;
+
+    @Json(name = "preview_inventory_return_button")
+    @Getter(AccessLevel.PUBLIC)
+    private final @Nullable ItemStack previewInventoryReturnButton;
+
     @Getter(AccessLevel.PUBLIC)
     private final @NotNull List<Reward> rewards;
 

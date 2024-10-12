@@ -1,11 +1,13 @@
 package cloud.grabsky.crates.listener;
 
 import cloud.grabsky.bedrock.components.Message;
+import cloud.grabsky.bedrock.inventory.BedrockPanel;
 import cloud.grabsky.crates.Crates;
 import cloud.grabsky.crates.configuration.PluginConfig;
 import cloud.grabsky.crates.configuration.PluginLocale;
 import cloud.grabsky.crates.crate.Crate;
 import cloud.grabsky.crates.crate.Reward;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -96,6 +98,58 @@ public class CratesListener implements Listener {
                 // Marking crate as no longer occupied.
                 isCrateOccupied.put(location, false);
             }, PluginConfig.ANIMATION_TIME);
+        }
+    }
+
+    @EventHandler
+    public void onCratePreview(final @NotNull PlayerInteractEvent event) {
+        // Skipping event calls we don't need to handle.
+        if (event.getPlayer().getGameMode() == GameMode.SPECTATOR || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.LEFT_CLICK_BLOCK)
+            return;
+        // Getting BlockState instance of the clicked block.
+        if (event.getClickedBlock().getState() instanceof TileState state) {
+            // Ignoring non-crate blocks.
+            if (state.getPersistentDataContainer().has(Crates.CRATE_NAME, PersistentDataType.STRING) == false)
+                return;
+            // Getting the player involved in this event.
+            final Player player = event.getPlayer();
+            // Skipping if player wants to place a block.
+            if (player.isSneaking() == true)
+                return;
+            // Cancelling the event because at this point we know player has clicked on a crate.
+            event.setCancelled(true);
+            // Reading crate id from the block. Can be null.
+            final @Nullable String crateId = state.getPersistentDataContainer().get(Crates.CRATE_NAME, PersistentDataType.STRING);
+            // Getting the Crate instance from the id. Can be null.
+            final @Nullable Crate crate = (crateId != null) ? plugin.getCratesManager().getCrate(crateId) : null;
+            // ...
+            if (crate != null && crate.getPreviewInventoryRows() != null) {
+                // Clamping the value to ensure it's in range.
+                final int rows = Math.clamp(crate.getPreviewInventoryRows(), 1, 6);
+                // Preparing the crate preview inventory.
+                final BedrockPanel panel = new BedrockPanel.Builder()
+                        .setTitle(MiniMessage.miniMessage().deserialize(crate.getPreviewInventoryTitle()))
+                        .setRows(rows)
+                        .build();
+                // Setting rewards in the inventory.
+                crate.getRewards().forEach(reward -> {
+                    if (reward.getPreviewInventorySlot() != null) {
+                        // Getting the reward preview. Display item is chosen if set.
+                        final @Nullable ItemStack item = (reward.getDisplayItem() != null)
+                                ? reward.getDisplayItem()
+                                : (reward.getItems() != null)
+                                        ? reward.getItems().getFirst()
+                                        : null;
+                        // Setting the item in GUI.
+                        panel.setItem(Math.clamp(reward.getPreviewInventorySlot(), 0, (rows * 9) - 1), item, null);
+                    }
+                });
+                // Setting the return button in GUI.
+                if (crate.getPreviewInventoryReturnButton() != null && crate.getPreviewInventoryReturnButtonSlot() != null)
+                    panel.setItem(Math.clamp(crate.getPreviewInventoryReturnButtonSlot(), 0, (rows * 9) - 1), crate.getPreviewInventoryReturnButton(), (e) -> panel.close());
+                // Opening inventory to the player.
+                panel.open(player, null);
+            }
         }
     }
 
