@@ -207,7 +207,7 @@ public class CratesListener implements Listener {
                     // Create Path instance of the log file.
                     final Path path = Path.of(plugin.getDataFolder().getPath(), "logs.log");
                     // Constructing log message.
-                    final String message = "[" + LocalDateTime.now().format(DATE_FORMATTER) + "] " + player.getName() + " (" + player.getUniqueId() + ") opened crate " + crate.getName() + " at " + location.blockX() + ", " + location.blockY() + ", " + location.blockZ() + " in " + location.getWorld().key().asString() + " and received reward with id " + reward.getIndex();
+                    final String message = "[" + LocalDateTime.now().format(DATE_FORMATTER) + "] [OPEN] " + player.getName() + " (" + player.getUniqueId() + ") opened crate " + crate.getName() + " at " + location.blockX() + ", " + location.blockY() + ", " + location.blockZ() + " in " + location.getWorld().key().asString() + " and received reward with id " + reward.getIndex();
                     // Logging to the file with console fallback in case something goes wrong.
                     try {
                         Files.write(path, Collections.singletonList(message), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
