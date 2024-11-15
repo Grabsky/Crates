@@ -24,6 +24,11 @@
         "crates_give_usage": "<dark_gray>› <gray>Usage: <gold>/crates give <white>(target) (key) <gray>(amount)",
         "crates_give_success_sender_single": "<dark_gray>› <gray>Gracz <gold><target><gray> otrzymał <gold><amount> <gray>klucz(y) <gold><key><gray>.",
         "crates_give_success_sender_all": "<dark_gray>›<gray>Każdy z graczy otrzymał <gold><amount> <gray>klucz(y) <gold><key><gray>.",
-        "crates_give_success_target": "<dark_gray>› <gray>Otrzymałeś <gold><amount> <gray>klucz(y) <gold><key><gray>."
+        "crates_give_success_target": "<dark_gray>› <gray>Otrzymałeś <gold><amount> <gray>klucz(y) <gold><key><gray>.",
+        // Crates > Roll
+        "crates_roll_usage": "<dark_gray>› <gray>Usage: <gold>/crates roll <white>(target) (crate) <gray>(--silent)",
+        "crates_roll_success_sender_single": "<dark_gray>› <gray>Gracz <gold><target><gray> otrzymał nagrodę ze skrzyni <gold><crate><gray>.",
+        "crates_roll_success_sender_all": "<dark_gray>› <gray>Każdy z graczy otrzymał nagrodę ze skrzyni <gold><crate><gray>.",
+        "crates_roll_success_target": "<dark_gray>› <gray>Nagroda z puli <gold><crate><gray> została dodana do ekwipunku."
     }
 }

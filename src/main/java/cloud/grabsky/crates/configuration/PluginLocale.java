@@ -55,6 +55,19 @@ public final class PluginLocale implements JsonConfiguration {
     @JsonPath("commands.crates_give_success_target")
     public static String COMMANDS_CRATES_GIVE_SUCCESS_TARGET;
 
+    // Crates > Roll
+
+    @JsonPath("commands.crates_roll_usage")
+    public static Component COMMANDS_CRATES_ROLL_USAGE;
+
+    @JsonPath("commands.crates_roll_success_sender_single")
+    public static String COMMANDS_CRATES_ROLL_SUCCESS_SENDER_SINGLE;
+
+    @JsonPath("commands.crates_roll_success_sender_all")
+    public static String COMMANDS_CRATES_ROLL_SUCCESS_SENDER_ALL;
+
+    @JsonPath("commands.crates_roll_success_target")
+    public static String COMMANDS_CRATES_ROLL_SUCCESS_TARGET;
 
     public static final class Commands implements JsonConfiguration {
 
