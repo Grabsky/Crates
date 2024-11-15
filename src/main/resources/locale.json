@@ -13,7 +13,7 @@
         "crates_help": [
             "",
             "<dark_gray>› <gold>/crates get <white>(crate)",
-            "<dark_gray>› <gold>/crates give <white>(target) (crate) <gray>(amount)",
+            "<dark_gray>› <gold>/crates give <white>(target) (key) <gray>(amount)",
             "<dark_gray>› <gold>/crates reload",
             ""
         ],
@@ -21,7 +21,7 @@
         "crates_get_usage": "<dark_gray>› <gray>Usage: <gold>/crates get <white>(crate)",
         "crates_get_success": "<dark_gray>› <gray>Otrzymałeś skrzynię <gold><crate><gray>.",
         // Crates > Give
-        "crates_give_usage": "<dark_gray>› <gray>Usage: <gold>/crates give <white>(target) (crate) <gray>(amount)",
+        "crates_give_usage": "<dark_gray>› <gray>Usage: <gold>/crates give <white>(target) (key) <gray>(amount)",
         "crates_give_success_sender_single": "<dark_gray>› <gray>Gracz <gold><target><gray> otrzymał <gold><amount> <gray>klucz(y) <gold><key><gray>.",
         "crates_give_success_sender_all": "<dark_gray>›<gray>Każdy z graczy otrzymał <gold><amount> <gray>klucz(y) <gold><key><gray>.",
         "crates_give_success_target": "<dark_gray>› <gray>Otrzymałeś <gold><amount> <gray>klucz(y) <gold><key><gray>."
