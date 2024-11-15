@@ -165,7 +165,7 @@ public final class CratesCommand extends RootCommand {
     public void onCratesGet(final @NotNull RootCommandContext context, final @NotNull ArgumentQueue arguments) {
         final Player sender = context.getExecutor().asPlayer();
         // Checking permissions.
-        if (sender.hasPermission(this.getPermission() + ".give") == true) {
+        if (sender.hasPermission(this.getPermission() + ".get") == true) {
             // Getting next argument as Crate.
             final Crate crate = arguments.next(Crate.class).asRequired(CRATES_GET_USAGE);
             // Getting some Crate properties.
@@ -187,7 +187,7 @@ public final class CratesCommand extends RootCommand {
     public void onCratesReload(final @NotNull RootCommandContext context) {
         final CommandSender sender = context.getExecutor().asCommandSender();
         // Checking permissions.
-        if (sender.hasPermission(this.getPermission() + ".give") == true) {
+        if (sender.hasPermission(this.getPermission() + ".reload") == true) {
             Message.of(plugin.onReload() == true ? PluginLocale.RELOAD_SUCCESS : PluginLocale.RELOAD_FAILURE).send(sender);
             return;
         }
