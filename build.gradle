@@ -47,6 +47,16 @@ paper {
     apiVersion = "1.21.3"
 }
 
+/* FOR GITHUB ACTIONS */
+
+tasks.register("release") {
+    print("${version.toString().split('-')[0]} #${System.getenv("GITHUB_RUN_NUMBER")}")
+}
+
+tasks.register("tag") {
+    print(version)
+}
+
 /* UTILITY METHODS */
 
 private final def fillCredentials(final MavenArtifactRepository repository) {
