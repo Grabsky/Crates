@@ -27,6 +27,8 @@
       "preview_inventory_slot": 0,
       // Reward weight. Used for calculating chance.
       "weight": 5,
+      // Reward function to use for giving items. Can be omitted and defaults to 'all'. Values: [none, random, all]
+      "items_reward_function": "all",
       // Items that are given to the player upon winning this reward.
       "items": [
         {

@@ -16,7 +16,9 @@ package cloud.grabsky.crates.crate;
 
 import cloud.grabsky.crates.Crates;
 import com.squareup.moshi.Json;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -100,12 +102,51 @@ public final class Crate {
         this.isInitialized = true;
     }
 
-    // Returns random Reward drawn from rewards path
+    // Returns random Reward drawn from the pool;
     public @NotNull Reward getRandomReward() {
         final int maxBound = rewardPool.size();
         final int random = new SecureRandom().nextInt(maxBound);
         final int rewardIndex = rewardPool.get(random);
         return rewards.get(rewardIndex);
+    }
+
+    // Rolls random reward for specified player.
+    public @NotNull Reward rollRandomReward(final @NotNull Player player) {
+        final Reward reward = this.getRandomReward();
+        // Adding items to inventory of the player.
+        if (reward.getItems() != null) {
+            if (reward.getItemsRewardFunction() == null || reward.getItemsRewardFunction() == Reward.RewardFunction.ALL) {
+                reward.getItems().forEach(it -> {
+                    // Adding item to player's inventory if not full.
+                    if (player.getInventory().firstEmpty() != -1)
+                        player.getInventory().addItem(it);
+                        // Otherwise, dropping reward at the location of the player.
+                    else player.getLocation().getWorld().dropItem(player.getLocation(), it, (entity) -> {
+                        // Setting the owner so no other player or entity can pick up the reward.
+                        entity.setOwner(player.getUniqueId());
+                    });
+                });
+            } else if (reward.getItemsRewardFunction() == Reward.RewardFunction.RANDOM) {
+                final int random = new SecureRandom().nextInt(reward.getItems().size());
+                // Getting random item from the list.
+                final ItemStack item = reward.getItems().get(random);
+                // Adding item to player's inventory if not full.
+                if (player.getInventory().firstEmpty() != -1)
+                    player.getInventory().addItem(item);
+                    // Otherwise, dropping reward at the location of the player.
+                else player.getLocation().getWorld().dropItem(player.getLocation(), item, (entity) -> {
+                    // Setting the owner so no other player or entity can pick up the reward.
+                    entity.setOwner(player.getUniqueId());
+                });
+            }
+        }
+        // Executing console commands. If any was specified.
+        if (reward.getConsoleCommands() != null)
+            reward.getConsoleCommands().forEach(it -> {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), it.replace("<player>", player.getName()));
+            });
+        // ...
+        return reward;
     }
 
     public boolean canUnlock(final @NotNull ItemStack item) {

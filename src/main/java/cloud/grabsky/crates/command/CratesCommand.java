@@ -276,24 +276,7 @@ public final class CratesCommand extends RootCommand {
     /* UTILITY METHODS */
 
     private void roll(final @NotNull Player target, final @NotNull Crate crate, final boolean isSilent) {
-        final Reward reward = crate.getRandomReward();
-        // Adding item to player's inventory. If specified.
-        if (reward.getItems() != null)
-            reward.getItems().forEach(it -> {
-                // Adding item to player's inventory if not full.
-                if (target.getInventory().firstEmpty() != -1)
-                    target.getInventory().addItem(it);
-                    // Otherwise, dropping reward at the location of the player.
-                else target.getLocation().getWorld().dropItem(target.getLocation(), it, (entity) -> {
-                    // Setting the owner so no other player or entity can pick up the reward.
-                    entity.setOwner(target.getUniqueId());
-                });
-            });
-        // Executing console commands. If any was specified.
-        if (reward.getConsoleCommands() != null)
-            reward.getConsoleCommands().forEach(it -> {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), it.replace("<player>", target.getName()));
-            });
+        final Reward reward = crate.rollRandomReward(target);
         // Sending message to the target. If command is not marked as '--silent'.
         if (isSilent == false)
             Message.of(PluginLocale.COMMANDS_CRATES_ROLL_SUCCESS_TARGET).placeholder("crate", crate.getDisplayName()).send(target);

@@ -14,6 +14,7 @@
  */
 package cloud.grabsky.crates;
 
+import cloud.grabsky.configuration.adapter.AbstractEnumJsonAdapter;
 import cloud.grabsky.configuration.paper.adapter.ComponentAdapter;
 import cloud.grabsky.configuration.paper.adapter.EnchantmentAdapterFactory;
 import cloud.grabsky.configuration.paper.adapter.EnchantmentEntryAdapterFactory;
@@ -28,6 +29,7 @@ import cloud.grabsky.configuration.paper.util.Resources;
 import cloud.grabsky.crates.configuration.adapter.ListAdapterFactory;
 import cloud.grabsky.crates.crate.Crate;
 import cloud.grabsky.crates.crate.Key;
+import cloud.grabsky.crates.crate.Reward;
 import com.squareup.moshi.Moshi;
 import net.kyori.adventure.text.Component;
 import okio.BufferedSource;
@@ -72,6 +74,7 @@ public class CratesManager {
                 .add(PersistentDataEntryAdapterFactory.INSTANCE)
                 .add(PersistentDataTypeAdapterFactory.INSTANCE)
                 .add(ListAdapterFactory.INSTANCE)
+                .add(Reward.RewardFunction.class, new AbstractEnumJsonAdapter<>(Reward.RewardFunction.class, false) {})
                 // Building...
                 .build();
         this.keysDirectory = new File(plugin.getDataFolder() + File.separator + "keys");

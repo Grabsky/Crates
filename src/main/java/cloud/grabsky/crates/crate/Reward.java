@@ -42,6 +42,10 @@ public final class Reward {
     @Getter(AccessLevel.PUBLIC)
     private final @Nullable ItemStack displayItem;
 
+    @Json(name = "items_reward_function")
+    @Getter(AccessLevel.PUBLIC)
+    private final @Nullable RewardFunction itemsRewardFunction;
+
     @Json(name = "items")
     @Getter(AccessLevel.PUBLIC)
     private final @Nullable List<ItemStack> items;
@@ -63,6 +67,10 @@ public final class Reward {
         this.index = index;
         // Returning this instance of Reward object to keep 'builder-like' flow.
         return this;
+    }
+
+    public enum RewardFunction {
+        NONE, RANDOM, ALL;
     }
 
 }

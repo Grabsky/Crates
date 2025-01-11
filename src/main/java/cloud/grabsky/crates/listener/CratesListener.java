@@ -21,6 +21,7 @@ import cloud.grabsky.crates.configuration.PluginConfig;
 import cloud.grabsky.crates.configuration.PluginLocale;
 import cloud.grabsky.crates.crate.Crate;
 import cloud.grabsky.crates.crate.Reward;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -84,6 +85,11 @@ public class CratesListener implements Listener {
                 it.setPickupDelay(Integer.MAX_VALUE);
                 // Zeroing velocity to prevent the item from moving.
                 it.setVelocity(new Vector(0, -0.5, 0));
+                // Setting custom name.
+                if (reward.hasData(DataComponentTypes.CUSTOM_NAME) == true) {
+                    it.customName(reward.getData(DataComponentTypes.CUSTOM_NAME));
+                    it.setCustomNameVisible(true);
+                }
             });
             // Playing configured sound.
             if (PluginConfig.OPEN_EFFECTS_SOUND != null)
@@ -200,24 +206,7 @@ public class CratesListener implements Listener {
                     // Removing 1 key from player's inventory
                     item.setAmount(item.getAmount() - 1);
                     // Drawing a reward
-                    final Reward reward = crate.getRandomReward();
-                    // Adding item to player's inventory. If specified.
-                    if (reward.getItems() != null)
-                        reward.getItems().forEach(it -> {
-                            // Adding item to player's inventory if not full.
-                            if (player.getInventory().firstEmpty() != -1)
-                                player.getInventory().addItem(it);
-                                // Otherwise, dropping reward at the location of the player.
-                            else player.getLocation().getWorld().dropItem(player.getLocation(), it, (entity) -> {
-                                // Setting the owner so no other player or entity can pick up the reward.
-                                entity.setOwner(player.getUniqueId());
-                            });
-                        });
-                    // Executing console commands. If any was specified.
-                    if (reward.getConsoleCommands() != null)
-                        reward.getConsoleCommands().forEach(it -> {
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), it.replace("<player>", player.getName()));
-                        });
+                    final Reward reward = crate.rollRandomReward(player);
                     // Create Path instance of the log file.
                     final Path path = Path.of(plugin.getDataFolder().getPath(), "logs.log");
                     // Constructing log message.
