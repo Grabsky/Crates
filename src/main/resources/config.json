@@ -19,5 +19,10 @@
     "failure_effects": {
         // Sound to be played.
         "sound": { "key": "entity.item.break", "source": "master", "volume": 1.0, "pitch": 1.0 }
+    },
+    // Preview effects. When player previews the crate.
+    "preview_effects": {
+        // Sound to be played.
+        "sound": { "key": "entity.shulker.hurt_closed", "source": "master", "volume": 1.0, "pitch": 1.0 }
     }
 }

@@ -39,4 +39,8 @@ public final class PluginConfig implements JsonConfiguration {
     @JsonPath("failure_effects.sound")
     public static @Nullable Sound FAILURE_EFFECTS_SOUND;
 
+    @JsonNullable
+    @JsonPath("preview_effects.sound")
+    public static @Nullable Sound PREVIEW_EFFECTS_SOUND;
+
 }

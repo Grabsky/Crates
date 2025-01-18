@@ -169,6 +169,9 @@ public class CratesListener implements Listener {
                     panel.setItem(Math.clamp(crate.getPreviewInventoryReturnButtonSlot(), 0, (rows * 9) - 1), crate.getPreviewInventoryReturnButton(), (e) -> panel.close());
                 // Opening inventory to the player.
                 panel.open(player, null);
+                // Playing effects.
+                if (PluginConfig.PREVIEW_EFFECTS_SOUND != null)
+                    player.playSound(PluginConfig.PREVIEW_EFFECTS_SOUND);
             }
         }
     }
