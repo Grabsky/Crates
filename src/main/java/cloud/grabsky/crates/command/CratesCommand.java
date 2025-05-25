@@ -174,11 +174,14 @@ public final class CratesCommand extends RootCommand {
                 target.getInventory().addItem(item);
                 // Otherwise, dropping key at the location of the player.
             else target.getLocation().getWorld().dropItem(target.getLocation(), item);
+            // Getting whether the --silent flag is present or not.
+            final boolean isSilent = arguments.next(String.class).asOptional("").equalsIgnoreCase("--silent") == true;
             // Sending message to the sender.
-            if (sender != target)
+            if (sender != target && isSilent == false)
                 Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_SENDER_SINGLE).placeholder("amount", amount).placeholder("key", keyDisplayName).placeholder("target", target).send(sender);
             // Sending message to the target.
-            Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_TARGET).placeholder("amount", amount).placeholder("key", keyDisplayName).send(target);
+            if (isSilent == false)
+                Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_TARGET).placeholder("amount", amount).placeholder("key", keyDisplayName).send(target);
             return;
         }
         // Sending error message to the sender.
