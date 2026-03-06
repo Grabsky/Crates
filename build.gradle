@@ -1,67 +1,67 @@
 plugins {
-    id "java-library"
-    id "net.minecrell.plugin-yml.paper" version "0.6.0"
-    id "com.gradleup.shadow" version "8.3.5"
+    id("java-library")
+    // https://github.com/jpenilla/run-task
+    id("xyz.jpenilla.run-paper") version "3.0.2"
+    // https://github.com/eldoriarpg/plugin-yml
+    id("de.eldoria.plugin-yml.paper") version "0.8.0"
 }
 
+final String VERSION = "1.21.11"
+final String RUN_NUMBER = System.getenv("GITHUB_RUN_NUMBER") ?: "DEV"
+
 group = "cloud.grabsky"
-version = "1.21.4-${System.getenv("GITHUB_RUN_NUMBER") ?: "DEV"}"
+version = "$VERSION-$RUN_NUMBER"
 
 repositories {
     mavenLocal()
     mavenCentral()
     // Repository for the Paper API.
     maven { url = "https://repo.papermc.io/repository/maven-public/" }
-    // Repository containing the 'bedrock' dependency.
-    maven { url = "https://maven.pkg.github.com/grabsky/bedrock"; fillCredentials(it) }
-    // Repository containing the 'configuration' dependency.
-    maven { url = "https://maven.pkg.github.com/grabsky/configuration"; fillCredentials(it) }
-    // Repository containing the 'commands' dependency.
-    maven { url = "https://maven.pkg.github.com/grabsky/commands"; fillCredentials(it) }
+    // Repository containing all my libraries.
+    maven { url = "https://repo.repsy.io/grabsky/maven" }
 }
 
 dependencies {
-    // Lombok
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
-    // Paper API
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    // Plugin libraries, must be shaded.
-    implementation("cloud.grabsky:bedrock:1.21-63")
-    implementation("cloud.grabsky:commands:1.20.1-38")
-    implementation("cloud.grabsky:configuration-paper:1.21.4-47")
+    // https://github.com/projectlombok/lombok
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
+    // https://github.com/PaperMC/Paper
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    // https://github.com/Grabsky/bedrock
+    paperLibrary("cloud.grabsky:bedrock:1.21.X-72")
+    // https://github.com/Grabsky/commands
+    paperLibrary("cloud.grabsky:commands:1.21.X-41")
+    // https://github.com/Grabsky/configuration
+    paperLibrary("cloud.grabsky:configuration-paper:1.21.4-58")
 }
 
-tasks {
-    shadowJar { archiveFileName = "${rootProject.name}-${project.version}.jar" }
-    compileJava {
-        options.fork = true
-        // Setting compatibility to Java 21 and above.
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
+runServer {
+    minecraftVersion("1.21.11")
+}
+
+compileJava {
+    options.fork = true
+    // Setting compatibility to Java 21 and above.
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+
+// Configuring runServer task to use JetBrains' JDK 25 for expanded hot-swap features.
+tasks.withType(xyz.jpenilla.runtask.task.AbstractRun.class).configureEach {
+    javaLauncher = javaToolchains.launcherFor { vendor = JvmVendorSpec.JETBRAINS; languageVersion = JavaLanguageVersion.of(25) }
+    jvmArgs("-XX:+AllowEnhancedClassRedefinition", "-Dcom.mojang.eula.agree=true", "-Dnet.kyori.ansi.colorLevel=truecolor")
 }
 
 paper {
+    name = "Crates"
     main = "cloud.grabsky.crates.Crates"
-    apiVersion = "1.21.4"
+    loader = "cloud.grabsky.crates.Crates\$PluginLoader"
+    apiVersion = "1.21.11"
+    generateLibrariesJson = true
 }
 
-/* FOR GITHUB ACTIONS */
+// Returns formatted release name. (for GitHub Actions)
+tasks.register("getRelease", () -> print("$VERSION #$RUN_NUMBER"))
 
-tasks.register("release") {
-    print("${version.toString().split('-')[0]} #${System.getenv("GITHUB_RUN_NUMBER")}")
-}
-
-tasks.register("tag") {
-    print(version)
-}
-
-/* UTILITY METHODS */
-
-private final def fillCredentials(final MavenArtifactRepository repository) {
-    repository.credentials {
-        username = findProperty("gpr.actor") ?: System.getenv("GITHUB_ACTOR")
-        password = findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
-    }
-}
+// Returns formatted tag name. (for GitHub Actions)
+tasks.register("getTag", () -> print("$VERSION+$RUN_NUMBER"))

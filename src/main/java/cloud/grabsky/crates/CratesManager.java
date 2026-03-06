@@ -139,7 +139,7 @@ public class CratesManager {
                     plugin.getLogger().severe(" (2) " + e.getCause().getClass().getSimpleName() + ": " + e.getCause().getMessage());
             }
         }
-        plugin.getLogger().info("Loaded " + keys.size() + " keys.");
+        plugin.getLogger().info("Loaded " + keys.size() + " key(s).");
     }
 
     public void reloadCrates() {
