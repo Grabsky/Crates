@@ -21,6 +21,7 @@ import cloud.grabsky.crates.configuration.PluginConfig;
 import cloud.grabsky.crates.configuration.PluginLocale;
 import cloud.grabsky.crates.crate.Crate;
 import cloud.grabsky.crates.crate.Reward;
+import cloud.grabsky.crates.util.Numbers;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -59,7 +60,9 @@ import org.jetbrains.annotations.Nullable;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.ExtensionMethod;
 
+@ExtensionMethod(Numbers.class)
 @SuppressWarnings("UnstableApiUsage")
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 public class CratesListener implements Listener {
@@ -153,16 +156,27 @@ public class CratesListener implements Listener {
                         .build();
                 // Setting rewards in the inventory.
                 crate.getRewards().forEach(reward -> {
-                    if (reward.getPreviewInventorySlot() != null) {
-                        // Getting the reward preview. Display item is chosen if set.
-                        final @Nullable ItemStack item = (reward.getDisplayItem() != null)
-                                ? reward.getDisplayItem()
-                                : (reward.getItems() != null)
-                                        ? reward.getItems().getFirst()
-                                        : null;
-                        // Setting the item in GUI.
-                        panel.setItem(Math.clamp(reward.getPreviewInventorySlot(), 0, (rows * 9) - 1), item, null);
+                    final int slot = switch (reward.getPreviewInventorySlot() != null ? reward.getPreviewInventorySlot() : "auto") {
+                        case "auto" -> -1;
+                        case "hidden", "none" -> -2;
+                        default -> reward.getPreviewInventorySlot().toInt();
+                    };
+                    // Skipping if configured as "hidden" or "none".
+                    if (slot <= -2)
+                        return;
+                    // Getting the reward preview. Display item is chosen if set.
+                    final @Nullable ItemStack item = (reward.getDisplayItem() != null)
+                            ? reward.getDisplayItem()
+                            : (reward.getItems() != null)
+                                    ? reward.getItems().getFirst()
+                                    : null;
+                    // Setting to the first empty slot if configured as "auto".
+                    if (slot == -1) {
+                        panel.setItem(panel.getInventory().firstEmpty(), item, null);
+                        return;
                     }
+                    // Setting to the configured slot.
+                    panel.setItem(Math.clamp(slot, 0, (rows * 9) - 1), item, null);
                 });
                 // Setting the return button in GUI.
                 if (crate.getPreviewInventoryReturnButton() != null && crate.getPreviewInventoryReturnButtonSlot() != null)

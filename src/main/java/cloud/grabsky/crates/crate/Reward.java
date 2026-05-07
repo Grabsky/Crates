@@ -33,7 +33,7 @@ public final class Reward {
 
     @Json(name = "preview_inventory_slot")
     @Getter(AccessLevel.PUBLIC)
-    private final @Nullable Integer previewInventorySlot;
+    private final @Nullable String previewInventorySlot;
 
     @Getter(AccessLevel.PUBLIC)
     private final int weight;
