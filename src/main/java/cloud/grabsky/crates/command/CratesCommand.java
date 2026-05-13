@@ -31,6 +31,7 @@ import cloud.grabsky.crates.configuration.PluginLocale;
 import cloud.grabsky.crates.crate.Crate;
 import cloud.grabsky.crates.crate.Key;
 import cloud.grabsky.crates.crate.Reward;
+import cloud.grabsky.crates.util.Extensions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -49,6 +50,9 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
+import lombok.experimental.ExtensionMethod;
+
+@ExtensionMethod(Extensions.class)
 @Command(name = "crates", permission = "crates.command.crates", usage = "/crates (...)")
 public final class CratesCommand extends RootCommand {
 
@@ -139,6 +143,8 @@ public final class CratesCommand extends RootCommand {
                 final Key key = arguments.next(Key.class).asRequired(CRATES_GIVE_USAGE);
                 // Getting next argument as Integer. Represents amount of keys.
                 final int amount = arguments.next(Integer.class, IntegerArgument.ofRange(1, key.getItem().getMaxStackSize())).asOptional(1);
+                // Getting whether the silent flag is present or not.
+                final boolean isSilent = arguments.next(String.class).asOptional("").equalsAnyIgnoreCase("--silent", "-s") == true;
                 // Getting some Key properties.
                 final String keyDisplayName = key.getDisplayName();
                 final ItemStack item = key.getItem().clone();
@@ -151,8 +157,9 @@ public final class CratesCommand extends RootCommand {
                         it.getInventory().addItem(item);
                         // Otherwise, dropping key at the location of the player.
                     else it.getLocation().getWorld().dropItem(it.getLocation(), item);
-                    // Sending message to the target.
-                    Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_TARGET).placeholder("amount", amount).placeholder("key", keyDisplayName).send(it);
+                    // Sending message to the target, unless silent flag is set.
+                    if (isSilent == false)
+                        Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_TARGET).placeholder("amount", amount).placeholder("key", keyDisplayName).send(it);
                 });
                 // Sending message to the sender.
                 Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_SENDER_ALL).placeholder("amount", amount).placeholder("key", keyDisplayName).send(sender);
@@ -164,6 +171,8 @@ public final class CratesCommand extends RootCommand {
             final Key key = arguments.next(Key.class).asRequired(CRATES_GIVE_USAGE);
             // Getting next argument as Integer. Represents amount of keys.
             final int amount = arguments.next(Integer.class, IntegerArgument.ofRange(1, key.getItem().getMaxStackSize())).asOptional(1);
+            // Getting whether the silent flag is present or not.
+            final boolean isSilent = arguments.next(String.class).asOptional("").equalsAnyIgnoreCase("--silent", "-s") == true;
             // Getting some Key properties.
             final String keyDisplayName = key.getDisplayName();
             final ItemStack item = key.getItem().clone();
@@ -174,8 +183,6 @@ public final class CratesCommand extends RootCommand {
                 target.getInventory().addItem(item);
                 // Otherwise, dropping key at the location of the player.
             else target.getLocation().getWorld().dropItem(target.getLocation(), item);
-            // Getting whether the --silent flag is present or not.
-            final boolean isSilent = arguments.next(String.class).asOptional("").equalsIgnoreCase("--silent") == true;
             // Sending message to the sender.
             if (sender != target && isSilent == false)
                 Message.of(PluginLocale.COMMANDS_CRATES_GIVE_SUCCESS_SENDER_SINGLE).placeholder("amount", amount).placeholder("key", keyDisplayName).placeholder("target", target).send(sender);
