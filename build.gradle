@@ -19,6 +19,8 @@ repositories {
     maven { url = "https://repo.papermc.io/repository/maven-public/" }
     // Repository containing all my libraries.
     maven { url = "https://repo.repsy.io/grabsky/maven" }
+    // https://github.com/PlaceholderAPI/PlaceholderAPI
+    maven { url = "https://repo.extendedclip.com/releases/" }
 }
 
 dependencies {
@@ -33,6 +35,9 @@ dependencies {
     paperLibrary("cloud.grabsky:commands:1.21.X-41")
     // https://github.com/Grabsky/configuration
     paperLibrary("cloud.grabsky:configuration-paper:1.21.4-59")
+    // https://github.com/PlaceholderAPI/PlaceholderAPI
+    compileOnly("me.clip:placeholderapi:2.12.2")
+
 }
 
 runServer {
@@ -58,6 +63,9 @@ paper {
     loader = "cloud.grabsky.crates.Crates\$PluginLoader"
     apiVersion = "1.21.11"
     generateLibrariesJson = true
+    serverDependencies {
+        "PlaceholderAPI" { load = "BEFORE"; required = true }
+    }
 }
 
 // Returns formatted release name. (for GitHub Actions)

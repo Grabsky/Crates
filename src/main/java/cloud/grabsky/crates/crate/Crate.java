@@ -18,6 +18,7 @@ import cloud.grabsky.crates.Crates;
 import com.squareup.moshi.Json;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -111,8 +112,13 @@ public final class Crate {
     }
 
     // Rolls random reward for specified player.
-    public @NotNull Reward rollRandomReward(final @NotNull Player player) {
+    public @NotNull Reward rollRandomReward(final @NotNull Player player, final boolean increaseOpenedCount) {
         final Reward reward = this.getRandomReward();
+        // Increasing total number of opened crates for the player.
+        if (increaseOpenedCount == true) {
+            final NamespacedKey key = new NamespacedKey("crates", "opened/" + name);
+            player.getPersistentDataContainer().set(key, PersistentDataType.LONG, player.getPersistentDataContainer().getOrDefault(key, PersistentDataType.LONG, 0L) + 1L);
+        }
         // Adding items to inventory of the player.
         if (reward.getItems() != null) {
             if (reward.getItemsRewardFunction() == null || reward.getItemsRewardFunction() == Reward.RewardFunction.ALL) {

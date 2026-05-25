@@ -286,7 +286,7 @@ public final class CratesCommand extends RootCommand {
     /* UTILITY METHODS */
 
     private void roll(final @NotNull Player target, final @NotNull Crate crate, final boolean isSilent) {
-        final Reward reward = crate.rollRandomReward(target);
+        final Reward reward = crate.rollRandomReward(target, false);
         // Sending message to the target. If command is not marked as '--silent'.
         if (isSilent == false)
             Message.of(PluginLocale.COMMANDS_CRATES_ROLL_SUCCESS_TARGET).placeholder("crate", crate.getDisplayName()).send(target);

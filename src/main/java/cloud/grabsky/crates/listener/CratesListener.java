@@ -223,7 +223,7 @@ public class CratesListener implements Listener {
                     // Removing 1 key from player's inventory
                     item.setAmount(item.getAmount() - 1);
                     // Drawing a reward
-                    final Reward reward = crate.rollRandomReward(player);
+                    final Reward reward = crate.rollRandomReward(player, true);
                     // Create Path instance of the log file.
                     final Path path = Path.of(plugin.getDataFolder().getPath(), "logs.log");
                     // Constructing log message.

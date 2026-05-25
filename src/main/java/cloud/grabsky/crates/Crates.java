@@ -33,7 +33,10 @@ import cloud.grabsky.crates.listener.CratesListener;
 import com.google.gson.Gson;
 import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
 import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.graph.Dependency;
@@ -58,6 +61,9 @@ import static cloud.grabsky.configuration.paper.util.Resources.ensureResourceExi
 public final class Crates extends JavaPlugin {
 
     @Getter(AccessLevel.PUBLIC)
+    private static Crates instance;
+
+    @Getter(AccessLevel.PUBLIC)
     private BedrockScheduler bedrockScheduler;
 
     @Getter(AccessLevel.PUBLIC)
@@ -75,8 +81,9 @@ public final class Crates extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         // Creating BedrockScheduler instance.
-        new BedrockScheduler(this);
+        this.bedrockScheduler = new BedrockScheduler(this);
         // Creating ConfigurationMapper instance.
         this.configurationMapper = PaperConfigurationMapper.create();
         // Initializing CratesManager
@@ -104,6 +111,8 @@ public final class Crates extends JavaPlugin {
                 .registerCommand(CratesCommand.class);
         // Register listeners required for crate preview inventories to work properly.
         BedrockPanel.registerDefaultListeners(this);
+        // Registering PlaceholderAPI placeholders...
+        Placeholders.INSTANCE.register();
     }
 
     public boolean onReload() {
@@ -129,6 +138,42 @@ public final class Crates extends JavaPlugin {
                 this.getLogger().severe(" (2) " + e.getCause().getClass().getSimpleName() + ": " + e.getCause().getMessage());
             // Returning false, as plugin has failed to reload.
             return false;
+        }
+    }
+
+
+    public static final class Placeholders extends PlaceholderExpansion {
+        public static final Placeholders INSTANCE = new Placeholders(); // SINGLETON
+
+        @Override
+        public boolean persist() {
+            return true;
+        }
+
+        @Override
+        public @NotNull String getAuthor() {
+            return "Grabsky";
+        }
+
+        @Override
+        public @NotNull String getIdentifier() {
+            return "crates";
+        }
+
+        @Override
+        public @NotNull String getVersion() {
+            return Crates.getInstance().getPluginMeta().getVersion();
+        }
+
+        @Override
+        public String onRequest(final @NotNull OfflinePlayer offlinePlayer, final @NotNull String params) {
+            // Placeholder: %crates_opened_count_[CRATE]%
+            if (params.startsWith("opened_count_") == true && offlinePlayer.isConnected() == true) {
+                final String crateId = params.replace("opened_count_", "");
+                final Long count = offlinePlayer.getPersistentDataContainer().getOrDefault(new NamespacedKey("crates", "opened/" + crateId), PersistentDataType.LONG, 0L);
+                return String.valueOf(count);
+            }
+            return null;
         }
     }
 
