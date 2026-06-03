@@ -22,6 +22,8 @@ import cloud.grabsky.crates.configuration.PluginLocale;
 import cloud.grabsky.crates.crate.Crate;
 import cloud.grabsky.crates.crate.Reward;
 import cloud.grabsky.crates.util.Numbers;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -54,6 +56,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,6 +75,10 @@ public class CratesListener implements Listener {
 
     // Map containing crate states, of whether specific crate is currently occupied or not,
     private final Map<Location, Boolean> isCrateOccupied = new HashMap<>();
+
+    private final Cache<UUID, Byte> crateInteractionThreshold = CacheBuilder.newBuilder()
+            .expireAfterWrite(250L, TimeUnit.MILLISECONDS)
+            .build();
 
     // DateTimeFormatter instance used in file logging.
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
@@ -141,6 +149,11 @@ public class CratesListener implements Listener {
                 return;
             // Cancelling the event because at this point we know player has clicked on a crate.
             event.setCancelled(true);
+            // WORKAROUND: https://github.com/PaperMC/Paper/issues/6315
+            // Thresholding crate interactions because event is firing twice, with LEFT_CLICK_BLOCK and RIGHT_CLICK_BLOCK.
+            if (crateInteractionThreshold.getIfPresent(event.getPlayer().getUniqueId()) != null)
+                return;
+            crateInteractionThreshold.put(event.getPlayer().getUniqueId(), (byte) 1);
             // Reading crate id from the block. Can be null.
             final @Nullable String crateId = state.getPersistentDataContainer().get(Crates.CRATE_NAME, PersistentDataType.STRING);
             // Getting the Crate instance from the id. Can be null.
@@ -209,6 +222,11 @@ public class CratesListener implements Listener {
                 return;
             // Cancelling the event because at this point we know player has clicked on a crate.
             event.setCancelled(true);
+            // WORKAROUND: https://github.com/PaperMC/Paper/issues/6315
+            // Thresholding crate interactions because event is firing twice, with LEFT_CLICK_BLOCK and RIGHT_CLICK_BLOCK.
+            if (crateInteractionThreshold.getIfPresent(event.getPlayer().getUniqueId()) != null)
+                return;
+            crateInteractionThreshold.put(event.getPlayer().getUniqueId(), (byte) 1);
             // Reading crate id from the block. Can be null.
             final @Nullable String crateId = state.getPersistentDataContainer().get(Crates.CRATE_NAME, PersistentDataType.STRING);
             // Getting the Crate instance from the id. Can be null.
